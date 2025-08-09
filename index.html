@@ -98,15 +98,48 @@
     .mod:hover{box-shadow:0 12px 30px rgba(0,0,0,.28);transform:translateY(-2px)}
 
     /* Demo */
-    /* demo-wrap artık her zaman 1fr 1fr gridini kullanıyor, responsive kural kaldırıldı. */
-    .demo-wrap{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:28px;align-items:start}
+    /* Responsive: mobile single column, desktop two columns */
+    .demo-wrap{
+      display:grid;
+      gap:26px;
+      align-items:start;
+      grid-template-columns:1fr; /* mobile default */
+    }
+    @media (min-width: 981px){
+      .demo-wrap{ grid-template-columns:1fr 1fr; }
+    }
+
     .demo-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
-    .demo-chat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+
+    /* Chat panel made flexible */
+    .demo-chat{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:18px;
+      display:flex;
+      flex-direction:column; /* header + msgs + input */
+      min-height:360px;
+    }
     .chat-head{display:flex;align-items:center;gap:8px;color:#cbd5e1;border-bottom:1px solid #1e2a4a;padding-bottom:10px;margin-bottom:10px}
-    .msgs{display:grid;gap:8px;max-height:220px;overflow:auto}
-    .m{max-width:85%;padding:10px 12px;border-radius:12px;font-size:.95rem}
+
+    .msgs{
+      display:grid;
+      gap:10px;
+      overflow:auto;
+      flex:1;                 /* fill remaining vertical space */
+      max-height:none;        /* let flex control */
+      overscroll-behavior:contain;
+      padding-right:4px;      /* room for scrollbar */
+      word-break:break-word;
+      overflow-wrap:anywhere; /* long file paths/links */
+      margin-top:10px;
+    }
+
+    .m{max-width:90%;padding:10px 12px;border-radius:12px;font-size:.95rem}
     .m.user{margin-left:auto;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e}
     .m.ai{background:#0f172a;border:1px solid #233258;color:#e2e8f0}
+
     .chat-input{display:flex;gap:8px;margin-top:10px}
     .chat-input input{flex:1;background:#0f172a;border:1px solid #233258;border-radius:999px;padding:10px 14px;color:#e2e8f0}
     .chat-input button{border-radius:999px;padding:10px 16px}
@@ -127,7 +160,7 @@
     .fade-in-element{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
     .fade-in-element.visible{opacity:1;transform:translateY(0)}
 
-    /* Responsive */
+    /* Responsive tweaks */
     @media (max-width: 980px){
       .hero .inner{grid-template-columns:1fr}
       .grid .feature{grid-column:span 6}
@@ -138,6 +171,9 @@
     @media (max-width: 640px){
       .grid .feature{grid-column:span 12}
       .modalities{grid-template-columns:repeat(2,1fr)}
+      .m{max-width:100%}      /* full-width bubbles for small screens */
+      .msgs{max-height:55vh}  /* comfy scroll area */
+      .demo-chat{padding:16px}
     }
 
     /* Reduced motion */
@@ -146,18 +182,23 @@
       .btn:hover{transform:none}
       .fade-in-element{transition:none}
     }
+
+    /* Safe area for iOS */
+    @supports(padding:max(0px)){
+      body{ padding-bottom: max(0px, env(safe-area-inset-bottom)); }
+    }
   </style>
 </head>
 <body>
   <header class="header" role="banner">
     <div class="container nav" aria-label="Ana gezinme">
-        <a class="brand" href="#" aria-label="SAKAI ana sayfa">
-  <span class="logo" aria-hidden="true"
-        style="background:none;box-shadow:none;width:180px;height:180px;display:flex;align-items:center;justify-content:center;padding:0">
-    <img src="logo3_no_background.png" alt="SAKAI Logo"
-         style="max-height:100%;max-width:100%;display:block;object-fit:contain" />
-  </span>
-</a>
+      <a class="brand" href="#" aria-label="SAKAI ana sayfa">
+        <span class="logo" aria-hidden="true"
+              style="background:none;box-shadow:none;width:180px;height:180px;display:flex;align-items:center;justify-content:center;padding:0">
+          <img src="logo3_no_background.png" alt="SAKAI Logo"
+               style="max-height:100%;max-width:100%;display:block;object-fit:contain" />
+        </span>
+      </a>
 
       <nav class="nav-links" aria-label="Birincil">
         <a href="#features">Özellikler</a>
@@ -300,103 +341,113 @@
   </section>
 
   <section class="section" id="demo">
-  <div class="container">
-    <h2>Hızlı Demo</h2>
-    <p class="sub">RAG destekli SAKAI sohbet arayüzünden örnek etkileşim</p>
+    <div class="container">
+      <h2>Hızlı Demo</h2>
+      <p class="sub">RAG destekli SAKAI sohbet arayüzünden örnek etkileşim</p>
 
-    <div class="demo-wrap">
-      <div class="demo-chat"> <div class="msgs" aria-live="polite" style="display:grid;gap:10px;max-height:260px;overflow:auto;margin-top:10px">
-          <div class="m ai" style="background:#141b35;border:1px solid #233258;color:#d4dbe8;border-radius:14px;padding:10px 14px;max-width:85%">
-            Merhaba! “Q2_2025_GelirTablosu.xlsx” ve “Earnings_Call_2025Q2.pdf” dosyalarıyla çalışıyorum. İlk sorunuz nedir?
-          </div>
+      <div class="demo-wrap">
+        <div class="demo-chat">
+          <div class="chat-head"><i class="fa-regular fa-comments"></i> Örnek Sohbet</div>
+          <div class="msgs" aria-live="polite">
+            <div class="m ai">
+              Merhaba! “Q2_2025_GelirTablosu.xlsx” ve “Earnings_Call_2025Q2.pdf” dosyalarıyla çalışıyorum. İlk sorunuz nedir?
+            </div>
 
-          <div class="m user" style="margin-left:auto;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e;border-radius:14px;padding:10px 14px;max-width:85%">
-            Q2 net satış ve brüt marj kaç?
-          </div>
-          <div class="m ai" style="background:#141b35;border:1px solid #233258;color:#d4dbe8;border-radius:14px;padding:10px 14px;max-width:85%">
-            Net satış: <strong>₺1.24B</strong> · Brüt marj: <strong>%36.8</strong>.<br>
-            <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “GelirTablosu”!B12,C18</em>
-          </div>
+            <div class="m user">
+              Q2 net satış ve brüt marj kaç?
+            </div>
+            <div class="m ai">
+              Net satış: <strong>₺1.24B</strong> · Brüt marj: <strong>%36.8</strong>.<br>
+              <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “GelirTablosu”!B12,C18</em>
+            </div>
 
-          <div class="m user" style="margin-left:auto;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e;border-radius:14px;padding:10px 14px;max-width:85%">
-            Net kâr marjı ve EBITDA nedir?
-          </div>
-          <div class="m ai" style="background:#141b35;border:1px solid #233258;color:#d4dbe8;border-radius:14px;padding:10px 14px;max-width:85%">
-            Net kâr marjı: <strong>%15.1</strong> · EBITDA: <strong>₺238M</strong>.<br>
-            <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Özet”!D6,D9</em>
-          </div>
+            <div class="m user">
+              Net kâr marjı ve EBITDA nedir?
+            </div>
+            <div class="m ai">
+              Net kâr marjı: <strong>%15.1</strong> · EBITDA: <strong>₺238M</strong>.<br>
+              <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Özet”!D6,D9</em>
+            </div>
 
-          <div class="m user" style="margin-left:auto;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e;border-radius:14px;padding:10px 14px;max-width:85%">
-            Operasyonel giderlerin % değişimi?
-          </div>
-          <div class="m ai" style="background:#141b35;border:1px solid #233258;color:#d4dbe8;border-radius:14px;padding:10px 14px;max-width:85%">
-            Q/Q bazda <strong>%+6.3</strong> artış (özellikle S&M kalemi).<br>
-            <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Giderler”!B7:D12</em>
-          </div>
+            <div class="m user">
+              Operasyonel giderlerin % değişimi?
+            </div>
+            <div class="m ai">
+              Q/Q bazda <strong>%+6.3</strong> artış (özellikle S&M kalemi).<br>
+              <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Giderler”!B7:D12</em>
+            </div>
 
-          <div class="m user" style="margin-left:auto;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e;border-radius:14px;padding:10px 14px;max-width:85%">
-            Kur etkisi (FX) net kâra katkı?
-          </div>
-          <div class="m ai" style="background:#141b35;border:1px solid #233258;color:#d4dbe8;border-radius:14px;padding:10px 14px;max-width:85%">
-            FX net etkisi: <strong>₺+18.6M</strong> (elde edilen kur farkı gelirleri).<br>
-            <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Diğer Gelir/Gider”!C5</em>
-          </div>
+            <div class="m user">
+              Kur etkisi (FX) net kâra katkı?
+            </div>
+            <div class="m ai">
+              FX net etkisi: <strong>₺+18.6M</strong> (elde edilen kur farkı gelirleri).<br>
+              <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Diğer Gelir/Gider”!C5</em>
+            </div>
 
-          <div class="m user" style="margin-left:auto;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e;border-radius:14px;padding:10px 14px;max-width:85%">
-            Q3 için brüt marj rehberi?
-          </div>
-          <div class="m ai" style="background:#141b35;border:1px solid #233258;color:#d4dbe8;border-radius:14px;padding:10px 14px;max-width:85%">
-            CFO rehberi: <strong>+80‑120 bps</strong> iyileşme beklentisi.<br>
-            <em>Kaynak: Earnings_Call_2025Q2.pdf → s.3 (Soru‑Cevap)</em>
-          </div>
+            <div class="m user">
+              Q3 için brüt marj rehberi?
+            </div>
+            <div class="m ai">
+              CFO rehberi: <strong>+80‑120 bps</strong> iyileşme beklentisi.<br>
+              <em>Kaynak: Earnings_Call_2025Q2.pdf → s.3 (Soru‑Cevap)</em>
+            </div>
 
-          <div class="m user" style="margin-left:auto;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e;border-radius:14px;padding:10px 14px;max-width:85%">
-            Serbest nakit akımı (FCF) ve borç/özkaynak oranı?
+            <div class="m user">
+              Serbest nakit akımı (FCF) ve borç/özkaynak oranı?
+            </div>
+            <div class="m ai">
+              FCF: <strong>₺126M</strong> · Borç/Özkaynak: <strong>0.42x</strong>.<br>
+              <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Nakit Akımı”!E14; “Bilanço”!C22,C34</em>
+            </div>
           </div>
-          <div class="m ai" style="background:#141b35;border:1px solid #233258;color:#d4dbe8;border-radius:14px;padding:10px 14px;max-width:85%">
-            FCF: <strong>₺126M</strong> · Borç/Özkaynak: <strong>0.42x</strong>.<br>
-            <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Nakit Akımı”!E14; “Bilanço”!C22,C34</em>
+          <!-- İstersen aktif input da gösterebilirsin -->
+          <!--
+          <div class="chat-input">
+            <input placeholder="Sorunuzu yazın..." />
+            <button class="btn btn-primary"><i class="fa-regular fa-paper-plane"></i></button>
           </div>
+          -->
+        </div>
+        <div class="demo-box">
+          <h3 style="margin-bottom:8px">Neden SAKAI?</h3>
+          <ul style="color:var(--muted);display:grid;gap:10px">
+            <li><i class="fa-solid fa-check"></i> Dosya-kısıtlı cevap ve kaynak alıntısı ile <strong>halüsinasyon azaltma</strong>.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>On-prem / offline</strong> kurulum; veriniz kurum dışına çıkmaz.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Rol bazlı erişim</strong> ve kullanıcıya özel paneller.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Plug & Play</strong> entegrasyon: Kafka, Elastic, PostgreSQL…</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Çoklu veri türü analizi</strong>: metin, görsel, ses, video, sinyal, tablo.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Gerçek zamanlı sorgu yanıtı</strong> ve büyük veri desteği.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Kuruma özel LLM eğitimi</strong> ile daha doğru ve bağlama uygun yanıtlar.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Endüstri standartlarında güvenlik</strong>: şifreleme, loglama, erişim kontrolü.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Modüler mimari</strong> ile ihtiyaca göre özelleştirilebilir yapı.</li>
+          </ul>
         </div>
       </div>
-      <div class="demo-box">
-        <h3 style="margin-bottom:8px">Neden SAKAI?</h3>
-        <ul style="color:var(--muted);display:grid;gap:10px">
-          <li><i class="fa-solid fa-check"></i> Dosya-kısıtlı cevap ve kaynak alıntısı ile <strong>halüsinasyon azaltma</strong>.</li>
-          <li><i class="fa-solid fa-check"></i> <strong>On-prem / offline</strong> kurulum; veriniz kurum dışına çıkmaz.</li>
-          <li><i class="fa-solid fa-check"></i> <strong>Rol bazlı erişim</strong> ve kullanıcıya özel paneller.</li>
-          <li><i class="fa-solid fa-check"></i> <strong>Plug & Play</strong> entegrasyon: Kafka, Elastic, PostgreSQL…</li>
-          <li><i class="fa-solid fa-check"></i> <strong>Çoklu veri türü analizi</strong>: metin, görsel, ses, video, sinyal, tablo.</li>
-          <li><i class="fa-solid fa-check"></i> <strong>Gerçek zamanlı sorgu yanıtı</strong> ve büyük veri desteği.</li>
-          <li><i class="fa-solid fa-check"></i> <strong>Kuruma özel LLM eğitimi</strong> ile daha doğru ve bağlama uygun yanıtlar.</li>
-          <li><i class="fa-solid fa-check"></i> <strong>Endüstri standartlarında güvenlik</strong>: şifreleme, loglama, erişim kontrolü.</li>
-          <li><i class="fa-solid fa-check"></i> <strong>Modüler mimari</strong> ile ihtiyaca göre özelleştirilebilir yapı.</li>
-        </ul>
+    </div>
+  </section>
+
+  <section class="section" id="contact">
+    <div class="container">
+      <h2>İletişime Geç</h2>
+      <p class="sub">Kurumunuz için canlı demo ve fiyatlandırma bilgisi almak için bizimle iletişime geçin</p>
+
+      <div class="feature" style="grid-column:span 12; text-align:center; padding:24px; margin-top:24px">
+        <p style="margin-bottom:12px; font-size:1.05rem; color:var(--text)">
+          <i class="fa-regular fa-envelope"></i>
+          <strong>E-posta:</strong> <a href="mailto:berkanttugberk@gmail.com" style="color:var(--primary-2)">berkanttugberk@gmail.com</a>
+        </p>
+        <p style="margin-bottom:12px; font-size:1.05rem; color:var(--text)">
+          <i class="fa-regular fa-envelope"></i>
+          <strong>E-posta:</strong> <a href="mailto:turgutmetekagan@gmail.com" style="color:var(--primary-2)">turgutmetekagan@gmail.com</a>
+        </p>
+
+        <a href="mailto:berkanttugberk@gmail.com" class="btn btn-primary">
+          <i class="fa-regular fa-paper-plane"></i> Mail Gönder
+        </a>
       </div>
     </div>
-  </div>
-</section>
-  <section class="section" id="contact">
-  <div class="container">
-    <h2>İletişime Geç</h2>
-    <p class="sub">Kurumunuz için canlı demo ve fiyatlandırma bilgisi almak için bizimle iletişime geçin</p>
-    
-    <div class="feature" style="grid-column:span 12; text-align:center; padding:24px; margin-top:24px">
-      <p style="margin-bottom:12px; font-size:1.05rem; color:var(--text)">
-        <i class="fa-regular fa-envelope"></i> 
-        <strong>E-posta:</strong> <a href="mailto:berkanttugberk@gmail.com" style="color:var(--primary-2)">berkanttugberk@gmail.com</a>
-      </p>
-      <p style="margin-bottom:12px; font-size:1.05rem; color:var(--text)">
-        <i class="fa-regular fa-envelope"></i> 
-        <strong>E-posta:</strong>   <a href="mailto:turgutmetekagan@gmail.com" style="color:var(--primary-2)">turgutmetekagan@gmail.com</a>
-      </p>
-
-      <a href="mailto:berkanttugberk@gmail.com" class="btn btn-primary">
-        <i class="fa-regular fa-paper-plane"></i> Mail Gönder
-      </a>
-    </div>
-  </div>
-</section>
+  </section>
 
   <footer class="footer">
     <div class="container" style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap">
