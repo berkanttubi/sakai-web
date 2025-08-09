@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SAKAI – Çoklu Veri Analiz Platformu</title>
+  <meta name="description" content="SAKAI: metin, görsel, video, ses, sinyal ve tablo verilerini tek platformda birleştiren yapay zekâ destekli veri analiz yazılımı." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+  <style>
+    :root{
+      /* SAKAI brand */
+      --bg: #0b1020;
+      --bg-2:#0f1630;
+      --text:#e6e9ef;
+      --muted:#98a2b3;
+      --primary:#7c5cff; /* sakai purple */
+      --primary-2:#4aa8ff; /* accent */
+      --ring: rgba(124,92,255,.35);
+      --card:#0c1226;
+      --border:#1f2b4d;
+      --success:#58d68d;
+      --warning:#ffd166;
+      --danger:#ff6b6b;
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --shadow-soft: 0 8px 20px rgba(0,0,0,.2);
+      --grid: radial-gradient(circle at 1px 1px, rgba(255,255,255,.06) 1px, transparent 0) 0 0/24px 24px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1200px;margin-inline:auto;padding:0 24px}
+
+    /* Header */
+    .header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg, rgba(10,14,30,.9), rgba(10,14,30,.6));backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--border)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+    .brand .logo{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:conic-gradient(from 140deg,var(--primary),var(--primary-2));box-shadow:0 6px 18px rgba(124,92,255,.45)}
+    .brand span{font-size:1.1rem}
+    .nav-links{display:flex;gap:22px}
+    .nav-links a{color:var(--muted);font-weight:600}
+    .nav-links a:hover{color:#fff}
+    .nav-cta{display:flex;gap:10px}
+    .btn{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:999px;padding:10px 16px;font-weight:700;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e;border-color:transparent;box-shadow:0 10px 30px rgba(124,92,255,.4)}
+    .btn-ghost{background:transparent;color:#fff}
+
+    /* Mobile nav */
+    .burger{display:none;background:none;border:0;color:#fff;font-size:1.25rem}
+
+    /* Hero */
+    .hero{position:relative;isolation:isolate;padding:90px 0 40px;background:
+      radial-gradient(1000px 600px at 20% -10%, rgba(124,92,255,.35), transparent 60%),
+      radial-gradient(900px 500px at 80% -20%, rgba(74,168,255,.25), transparent 60%),
+      var(--grid),
+      linear-gradient(180deg,var(--bg),var(--bg-2))}
+    .hero .inner{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+    .hero h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.15;margin-top:10px;font-weight:900}
+    .hero p{margin-top:14px;color:#cbd5e1;font-size:1.05rem}
+    .cta{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
+
+    /* Hero cards */
+    .cards{position:relative;display:grid;gap:14px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));border:1px solid var(--border);backdrop-filter:blur(10px);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-soft);animation:float 6s ease-in-out infinite}
+    .card:nth-child(2){animation-delay:-2s}
+    .card:nth-child(3){animation-delay:-4s}
+    .card i{font-size:1.2rem;color:var(--primary-2)}
+    .card h3{margin-top:6px;font-size:1.05rem}
+    .card p{margin-top:6px;color:var(--muted);font-size:.95rem}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+    /* Section headings */
+    .section{padding:80px 0;border-top:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0))}
+    .section h2{font-size:clamp(1.6rem,3vw,2.2rem)}
+    .section .sub{color:var(--muted);margin-top:8px}
+
+    /* Features grid */
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin-top:32px}
+    .feature{grid-column:span 4;min-height:170px;background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));border:1px solid var(--border);border-radius:var(--radius);padding:18px;transition:.25s ease;position:relative;opacity:1}
+    .feature:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+    .feature i{color:var(--primary);font-size:1.15rem}
+    .feature h3{margin-top:10px;font-size:1.1rem}
+    .feature p{margin-top:8px;color:var(--muted)}
+
+    /* Modalities */
+    .modalities{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:28px}
+    .mod{border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px dashed var(--border);background:linear-gradient(180deg, rgba(124,92,255,.08), rgba(74,168,255,.06));opacity:1;transition:all .2s ease}
+    .mod i{font-size:1.6rem;margin-bottom:8px}
+    .mod strong{margin-top:2px}
+    .mod small{display:block;margin-top:6px;font-size:0.88rem;color:#cbd5e1;opacity:.9}
+    .mod:hover{box-shadow:0 12px 30px rgba(0,0,0,.28);transform:translateY(-2px)}
+
+    /* Demo */
+    .demo-wrap{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:28px}
+    .demo-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+    .chat{background:#0b1120;border:1px solid #1e2a4a;border-radius:12px;padding:12px}
+    .chat-head{display:flex;align-items:center;gap:8px;color:#cbd5e1;border-bottom:1px solid #1e2a4a;padding-bottom:10px;margin-bottom:10px}
+    .msgs{display:grid;gap:8px;max-height:220px;overflow:auto}
+    .m{max-width:85%;padding:10px 12px;border-radius:12px;font-size:.95rem}
+    .m.user{margin-left:auto;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e}
+    .m.ai{background:#0f172a;border:1px solid #233258;color:#e2e8f0}
+    .chat-input{display:flex;gap:8px;margin-top:10px}
+    .chat-input input{flex:1;background:#0f172a;border:1px solid #233258;border-radius:999px;padding:10px 14px;color:#e2e8f0}
+    .chat-input button{border-radius:999px;padding:10px 16px}
+
+    /* Integrations strip */
+    .integrations{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px}
+    .pill{border:1px solid var(--border);border-radius:999px;padding:8px 12px;color:var(--muted);background:rgba(255,255,255,.02)}
+
+    /* Footer */
+    .footer{padding:40px 0;border-top:1px solid var(--border);color:var(--muted)}
+
+    /* Utilities */
+    .sr-only{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .badge{font-size:.8rem;border:1px solid var(--border);padding:6px 10px;border-radius:999px;color:#cbd5e1;background:rgba(255,255,255,.03)}
+
+    /* Animation classes */
+    .fade-in-element{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+    .fade-in-element.visible{opacity:1;transform:translateY(0)}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero .inner{grid-template-columns:1fr}
+      .demo-wrap{grid-template-columns:1fr}
+      .grid .feature{grid-column:span 6}
+      .modalities{grid-template-columns:repeat(3,1fr)}
+      .nav-links{display:none}
+      .burger{display:inline-flex}
+    }
+    @media (max-width: 640px){
+      .grid .feature{grid-column:span 12}
+      .modalities{grid-template-columns:repeat(2,1fr)}
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .card{animation:none}
+      .btn:hover{transform:none}
+      .fade-in-element{transition:none}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header" role="banner">
+    <div class="container nav" aria-label="Ana gezinme">
+      <a class="brand" href="#" aria-label="SAKAI ana sayfa">
+        <span class="logo" aria-hidden="true"><i class="fa-solid fa-s"></i></span>
+        <span>SAKAI</span>
+      </a>
+      <nav class="nav-links" aria-label="Birincil">
+        <a href="#features">Özellikler</a>
+        <a href="#modalities">Veri Tipleri</a>
+        <a href="#demo">Demo</a>
+        <a href="#contact">İletişim</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn btn-primary" href="#contact"><i class="fa-regular fa-paper-plane"></i> Teklif Al</a>
+        <button class="burger" id="burger" aria-label="Menüyü aç/kapat"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="container inner">
+      <div>
+        <span class="eyebrow"><i class="fa-solid fa-shield-check"></i> Çoklu Veri Analitiği • Offline destek</span>
+        <h1>Kurumsal verinizi <span style="background:linear-gradient(90deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent">tek platformda</span> anlayın ve hızla aksiyona dönüştürün.</h1>
+        <p>SAKAI; metin, görsel, video, ses, sinyal ve tabloları bir araya getirir. RAG ve LLM destekli arayüz ile doğal dilde soru sorun, güvenli ve yerinde (on‑prem) çalıştırın.</p>
+        <div class="badges" aria-label="Öne çıkanlar">
+          <span class="badge"><i class="fa-solid fa-lock"></i> Veri sizde kalsın</span>
+          <span class="badge"><i class="fa-solid fa-diagram-project"></i> Plug & Play entegrasyon</span>
+          <span class="badge"><i class="fa-solid fa-gauge-high"></i> Gerçek zamanlı analiz</span>
+        </div>
+        <div class="cta">
+          <a href="#demo" class="btn btn-primary"><i class="fa-regular fa-circle-play"></i> Canlı Demo</a>
+          <a href="#features" class="btn btn-ghost"><i class="fa-regular fa-compass"></i> Özelliklere göz at</a>
+        </div>
+      </div>
+      <div class="cards" aria-hidden="true">
+        <div class="card">
+          <i class="fa-solid fa-layer-group"></i>
+          <h3>Çoklu Veri Füzyonu</h3>
+          <p>Metin+ses+görsel+video+sinyal birleşik inceleme ve bağlam koruma.</p>
+        </div>
+        <div class="card">
+          <i class="fa-solid fa-brain"></i>
+          <h3>LLM + RAG</h3>
+          <p>Kaynak dayanaklı cevaplar, alıntı ve dosya‑kısıtlama desteği.</p>
+        </div>
+        <div class="card">
+          <i class="fa-solid fa-user-shield"></i>
+          <h3>Güvenlik</h3>
+          <p>RBAC, denetim izi, offline/air‑gapped kurulum.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" id="features">
+    <div class="container">
+      <h2>Güçlü Özellikler</h2>
+      <p class="sub">Verinizi operasyonel içgörüye dönüştüren SAKAI yetenekleri</p>
+
+      <div class="grid">
+        <article class="feature fade-in-element" aria-label="Çoklu veri füzyonu">
+          <i class="fa-solid fa-layer-group"></i>
+          <h3>Çoklu Veri Füzyonu</h3>
+          <p>Farklı kaynakları tek bağlamda birleştirip çapraz arama ve korelasyon yapın.</p>
+        </article>
+        <article class="feature fade-in-element" aria-label="Doğal dil sorgulama">
+          <i class="fa-solid fa-comments"></i>
+          <h3>Doğal Dil Sorgulama</h3>
+          <p>Chat arayüzünde Türkçe dahil 100+ dil desteği ile anında cevap alın.</p>
+        </article>
+        <article class="feature fade-in-element" aria-label="Görsel ve video analiz">
+          <i class="fa-solid fa-image"></i>
+          <h3>Görsel & Video Analizi</h3>
+          <p> Nesne tanıma, sahne/olay segmentasyonu.</p>
+        </article>
+        <article class="feature fade-in-element" aria-label="Ses ve çağrı analitiği">
+          <i class="fa-solid fa-microphone-lines"></i>
+          <h3>Ses & Çağrı Analitiği</h3>
+          <p>STT, konuşmacı ayrımı, duygu/niyet analizi, kalite metrikleri.</p>
+        </article>
+        <article class="feature fade-in-element" aria-label="Tablo ve veri ambarı">
+          <i class="fa-solid fa-table"></i>
+          <h3>Tablo & BI Köprüsü</h3>
+          <p>SQL/CSV/Parquet içe aktarım, metrik kartları ve dashboard köprüsü.</p>
+        </article>
+        <article class="feature fade-in-element" aria-label="Güvenlik ve denetim">
+          <i class="fa-solid fa-shield-halved"></i>
+          <h3>Güvenlik</h3>
+          <p>RBAC, SSO, denetim günlüğü ve hassas veri maskeleme.</p>
+        </article>
+      </div>
+
+      <div class="integrations" aria-label="Entegrasyonlar">
+        <span class="pill"><i class="fa-brands fa-aws"></i> S3 / MinIO</span>
+        <span class="pill"><i class="fa-solid fa-database"></i> PostgreSQL / pgvector</span>
+        <span class="pill"><i class="fa-brands fa-docker"></i> Docker / K8s</span>
+        <span class="pill"><i class="fa-solid fa-brain"></i> RAG</span>
+        <span class="pill"><i class="fa-solid fa-robot"></i> LLM</span>
+        <span class="pill"><i class="fa-solid fa-volume-high"></i> TTS</span>
+        <span class="pill"><i class="fa-brands fa-python"></i> PyTorch</span>
+        <span class="pill"><i class="fa-solid fa-stream"></i> Kafka</span>
+        <span class="pill"><i class="fa-brands fa-python"></i> Python SDK</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modalities / Data Types -->
+  <section class="section" id="modalities">
+    <div class="container">
+      <h2>Desteklenen Veri Tipleri</h2>
+      <p class="sub">Tek platform, farklı veri akışları</p>
+      <div class="modalities">
+        <div class="mod fade-in-element">
+          <i class="fa-regular fa-file-lines"></i>
+          <strong>Metin</strong>
+          <small>PDF, Word, HTML, e‑posta, Markdown</small>
+        </div>
+        <div class="mod fade-in-element">
+          <i class="fa-regular fa-image"></i>
+          <strong>Görsel</strong>
+          <small>OCR, EXIF çıkarımı</small>
+        </div>
+        <div class="mod fade-in-element">
+          <i class="fa-solid fa-video"></i>
+          <strong>Video</strong>
+          <small>Nesne tespiti, sahne/olay analizi, konuşma çıkarımı</small>
+        </div>
+        <div class="mod fade-in-element">
+          <i class="fa-solid fa-microphone"></i>
+          <strong>Ses</strong>
+          <small>STT, konuşmacı ayrımı (diarization), duygu/niyet</small>
+        </div>
+        <div class="mod fade-in-element">
+          <i class="fa-solid fa-satellite-dish"></i>
+          <strong>Sinyal</strong>
+          <small>RF/IoT/telm. spektrum analizi, anomali tespiti</small>
+        </div>
+        <div class="mod fade-in-element">
+          <i class="fa-solid fa-table"></i>
+          <strong>Tablo</strong>
+          <small>CSV, Excel, SQL sonuçları, metrik panelleri</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo -->
+  <section class="section" id="demo">
+    <div class="container">
+      <h2>Hızlı Demo</h2>
+      <p class="sub">RAG destekli SAKAI sohbet arayüzünden örnek etkileşim</p>
+
+      <div class="demo-wrap">
+        <div class="demo-box">
+          <div class="chat">
+            <div class="chat-head"><i class="fa-solid fa-robot"></i> SAKAI Chat</div>
+            <div class="msgs" aria-live="polite">
+              <div class="m ai">Merhaba! Hangi dokümanlar üzerinde çalışıyoruz?</div>
+              <div class="m user">"Güvenlik Politikası.pdf" ve "SLA_v2.xlsx" belgelerinden farklılıkları çıkar.</div>
+              <div class="m ai">Özet farklar: 1) MFA zorunluluğu v2.1'de genişletildi. 2) SLA v2'de yanıt süresi 2 saat → 1 saate indi. İstersen kaynak pasajları gösterebilirim.</div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-box">
+          <h3 style="margin-bottom:8px">Neden SAKAI?</h3>
+          <ul style="color:var(--muted);display:grid;gap:10px">
+            <li><i class="fa-solid fa-check"></i> Dosya-kısıtlı cevap ve kaynak alıntısı ile <strong>halüsinasyon azaltma</strong>.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>On-prem / offline</strong> kurulum; veriniz kurum dışına çıkmaz.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Rol bazlı erişim</strong> ve kullanıcıya özel paneller.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Plug & Play</strong> entegrasyon: Kafka, Elastic, PostgreSQL…</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Çoklu veri türü analizi</strong>: metin, görsel, ses, video, sinyal, tablo.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Gerçek zamanlı sorgu yanıtı</strong> ve büyük veri desteği.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Kuruma özel LLM eğitimi</strong> ile daha doğru ve bağlama uygun yanıtlar.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Endüstri standartlarında güvenlik</strong>: şifreleme, loglama, erişim kontrolü.</li>
+            <li><i class="fa-solid fa-check"></i> <strong>Modüler mimari</strong> ile ihtiyaca göre özelleştirilebilir yapı.</li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <!-- Contact -->
+<section class="section" id="contact">
+  <div class="container">
+    <h2>İletişime Geç</h2>
+    <p class="sub">Kurumunuz için canlı demo ve fiyatlandırma bilgisi almak için bizimle iletişime geçin</p>
+    
+    <div class="feature" style="grid-column:span 12; text-align:center; padding:24px; margin-top:24px">
+      <p style="margin-bottom:12px; font-size:1.05rem; color:var(--text)">
+        <i class="fa-regular fa-envelope"></i> 
+        <strong>E-posta:</strong> <a href="mailto:berkanttugberk@gmail.com" style="color:var(--primary-2)">berkanttugberk@gmail.com</a>
+      </p>
+      <a href="mailto:berkanttugberk@gmail.com" class="btn btn-primary">
+        <i class="fa-regular fa-paper-plane"></i> Mail Gönder
+      </a>
+    </div>
+  </div>
+</section>
+
+  <footer class="footer">
+    <div class="container" style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap">
+      <div>© <span id="y"></span> SAKAI • Tüm hakları saklıdır.</div>
+      <div style="display:flex;gap:14px">
+        <a href="#" aria-label="Gizlilik">Gizlilik</a>
+        <a href="#" aria-label="KVKK">KVKK</a>
+        <a href="#" aria-label="Kullanım Şartları">Kullanım Şartları</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Simple mobile menu
+    const burger = document.getElementById('burger');
+    burger?.addEventListener('click', () => {
+      const links = document.querySelector('.nav-links');
+      if(!links) return;
+      const shown = getComputedStyle(links).display !== 'none';
+      links.style.display = shown ? 'none' : 'flex';
+      links.style.flexDirection = 'column';
+      links.style.gap = '14px';
+      links.style.position = 'absolute';
+      links.style.top = '64px';
+      links.style.right = '16px';
+      links.style.background = 'rgba(13,18,40,.98)';
+      links.style.border = '1px solid var(--border)';
+      links.style.borderRadius = '12px';
+      links.style.padding = '12px 16px';
+      links.style.boxShadow = 'var(--shadow)';
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all fade-in elements
+    document.querySelectorAll('.fade-in-element').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Fallback: Make elements visible after 1 second if intersection observer fails
+    setTimeout(() => {
+      document.querySelectorAll('.fade-in-element:not(.visible)').forEach(el => {
+        el.classList.add('visible');
+      });
+    }, 1000);
+  </script>
+</body>
+</html>
