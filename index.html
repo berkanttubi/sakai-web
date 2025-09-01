@@ -45,11 +45,16 @@
     .nav-links{display:flex;gap:22px}
     .nav-links a{color:var(--muted);font-weight:600}
     .nav-links a:hover{color:#fff}
-    .nav-cta{display:flex;gap:10px}
+    .nav-cta{display:flex;gap:10px;align-items:center}
     .btn{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:999px;padding:10px 16px;font-weight:700;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
     .btn:hover{transform:translateY(-2px)}
     .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e;border-color:transparent;box-shadow:0 10px 30px rgba(124,92,255,.4)}
     .btn-ghost{background:transparent;color:#fff}
+
+    /* Lang switcher */
+    .lang-switch{display:inline-flex;gap:6px;border:1px solid var(--border);border-radius:999px;padding:4px;background:rgba(255,255,255,.02)}
+    .lang-switch button{border:0;background:transparent;color:var(--muted);font-weight:800;padding:6px 10px;border-radius:999px;cursor:pointer}
+    .lang-switch button.active{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e}
 
     /* Mobile nav */
     .burger{display:none;background:none;border:0;color:#fff;font-size:1.25rem}
@@ -98,44 +103,13 @@
     .mod:hover{box-shadow:0 12px 30px rgba(0,0,0,.28);transform:translateY(-2px)}
 
     /* Demo */
-    /* Responsive: mobile single column, desktop two columns */
-    .demo-wrap{
-      display:grid;
-      gap:26px;
-      align-items:start;
-      grid-template-columns:1fr; /* mobile default */
-    }
-    @media (min-width: 981px){
-      .demo-wrap{ grid-template-columns:1fr 1fr; }
-    }
-
+    .demo-wrap{display:grid;gap:26px;align-items:start;grid-template-columns:1fr}
+    @media (min-width: 981px){.demo-wrap{ grid-template-columns:1fr 1fr; }}
     .demo-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
 
-    /* Chat panel made flexible */
-    .demo-chat{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:18px;
-      display:flex;
-      flex-direction:column; /* header + msgs + input */
-      min-height:360px;
-    }
+    .demo-chat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;min-height:360px}
     .chat-head{display:flex;align-items:center;gap:8px;color:#cbd5e1;border-bottom:1px solid #1e2a4a;padding-bottom:10px;margin-bottom:10px}
-
-    .msgs{
-      display:grid;
-      gap:10px;
-      overflow:auto;
-      flex:1;                 /* fill remaining vertical space */
-      max-height:none;        /* let flex control */
-      overscroll-behavior:contain;
-      padding-right:4px;      /* room for scrollbar */
-      word-break:break-word;
-      overflow-wrap:anywhere; /* long file paths/links */
-      margin-top:10px;
-    }
-
+    .msgs{display:grid;gap:10px;overflow:auto;flex:1;max-height:none;overscroll-behavior:contain;padding-right:4px;word-break:break-word;overflow-wrap:anywhere;margin-top:10px}
     .m{max-width:90%;padding:10px 12px;border-radius:12px;font-size:.95rem}
     .m.user{margin-left:auto;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e}
     .m.ai{background:#0f172a;border:1px solid #233258;color:#e2e8f0}
@@ -171,8 +145,8 @@
     @media (max-width: 640px){
       .grid .feature{grid-column:span 12}
       .modalities{grid-template-columns:repeat(2,1fr)}
-      .m{max-width:100%}      /* full-width bubbles for small screens */
-      .msgs{max-height:55vh}  /* comfy scroll area */
+      .m{max-width:100%}
+      .msgs{max-height:55vh}
       .demo-chat{padding:16px}
     }
 
@@ -191,24 +165,27 @@
 </head>
 <body>
   <header class="header" role="banner">
-    <div class="container nav" aria-label="Ana gezinme">
-      <a class="brand" href="#" aria-label="SAKAI ana sayfa">
+    <div class="container nav" aria-label="Ana gezinme" data-i18n-aria="nav_aria">
+      <a class="brand" href="#" aria-label="SAKAI ana sayfa" data-i18n-aria="brand_aria">
         <span class="logo" aria-hidden="true"
               style="background:none;box-shadow:none;width:180px;height:180px;display:flex;align-items:center;justify-content:center;padding:0">
-          <img src="logo3_no_background.png" alt="SAKAI Logo"
-               style="max-height:100%;max-width:100%;display:block;object-fit:contain" />
+          <img src="logo3_no_background.png" alt="SAKAI Logo" />
         </span>
       </a>
 
-      <nav class="nav-links" aria-label="Birincil">
-        <a href="#features">Özellikler</a>
-        <a href="#modalities">Veri Tipleri</a>
-        <a href="#demo">Demo</a>
-        <a href="#contact">İletişim</a>
+      <nav class="nav-links" aria-label="Birincil" data-i18n-aria="primary_nav">
+        <a href="#features" data-i18n="nav_features">Özellikler</a>
+        <a href="#modalities" data-i18n="nav_modalities">Veri Tipleri</a>
+        <a href="#demo" data-i18n="nav_demo">Demo</a>
+        <a href="#contact" data-i18n="nav_contact">İletişim</a>
       </nav>
       <div class="nav-cta">
-        <a class="btn btn-primary" href="#contact"><i class="fa-regular fa-paper-plane"></i> Teklif Al</a>
-        <button class="burger" id="burger" aria-label="Menüyü aç/kapat"><i class="fa-solid fa-bars"></i></button>
+        <div class="lang-switch" role="group" aria-label="Dil seçici" data-i18n-aria="lang_switch">
+          <button id="btn-tr" class="active" aria-pressed="true">TR</button>
+          <button id="btn-en" aria-pressed="false">EN</button>
+        </div>
+        <a class="btn btn-primary" href="#contact"><i class="fa-regular fa-paper-plane"></i> <span data-i18n="cta_quote">Teklif Al</span></a>
+        <button class="burger" id="burger" aria-label="Menüyü aç/kapat" data-i18n-aria="burger_aria"><i class="fa-solid fa-bars"></i></button>
       </div>
     </div>
   </header>
@@ -216,34 +193,34 @@
   <section class="hero" id="home">
     <div class="container inner">
       <div>
-        <span class="eyebrow"><i class="fa-solid fa-shield-check"></i> Çoklu Veri Analitiği • Offline destek</span>
-        <h1>Kurumsal verinizi <span style="background:linear-gradient(90deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent">tek platformda</span> anlayın ve hızla aksiyona dönüştürün.</h1>
-        <p>SAKAI; metin, görsel, video, ses, sinyal ve tabloları bir araya getirir. RAG ve LLM destekli arayüz ile doğal dilde soru sorun, güvenli ve yerinde (on‑prem) çalıştırın.</p>
-        <div class="badges" aria-label="Öne çıkanlar">
-          <span class="badge"><i class="fa-solid fa-lock"></i> Veri sizde kalsın</span>
-          <span class="badge"><i class="fa-solid fa-diagram-project"></i> Plug & Play entegrasyon</span>
-          <span class="badge"><i class="fa-solid fa-gauge-high"></i> Gerçek zamanlı analiz</span>
+        <span class="eyebrow"><i class="fa-solid fa-shield-check"></i> <span data-i18n="eyebrow">Çoklu Veri Analitiği • Offline destek</span></span>
+        <h1 data-i18n="hero_title">Kurumsal verinizi <span style="background:linear-gradient(90deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent">tek platformda</span> anlayın ve hızla aksiyona dönüştürün.</h1>
+        <p data-i18n="hero_desc">SAKAI; metin, görsel, video, ses, sinyal ve tabloları bir araya getirir. RAG ve LLM destekli arayüz ile doğal dilde soru sorun, güvenli ve yerinde (on‑prem) çalıştırın.</p>
+        <div class="badges" aria-label="Öne çıkanlar" data-i18n-aria="badges_aria">
+          <span class="badge" data-i18n="badge_privacy"><i class="fa-solid fa-lock"></i> Veri sizde kalsın</span>
+          <span class="badge" data-i18n="badge_plug"><i class="fa-solid fa-diagram-project"></i> Plug & Play entegrasyon</span>
+          <span class="badge" data-i18n="badge_rt"><i class="fa-solid fa-gauge-high"></i> Gerçek zamanlı analiz</span>
         </div>
         <div class="cta">
-          <a href="#demo" class="btn btn-primary"><i class="fa-regular fa-circle-play"></i> Hızlı Demo</a>
-          <a href="#features" class="btn btn-ghost"><i class="fa-regular fa-compass"></i> Özelliklere göz at</a>
+          <a href="#demo" class="btn btn-primary"><i class="fa-regular fa-circle-play"></i> <span data-i18n="cta_demo">Hızlı Demo</span></a>
+          <a href="#features" class="btn btn-ghost"><i class="fa-regular fa-compass"></i> <span data-i18n="cta_features">Özelliklere göz at</span></a>
         </div>
       </div>
       <div class="cards" aria-hidden="true">
         <div class="card">
           <i class="fa-solid fa-layer-group"></i>
-          <h3>Çoklu Veri Füzyonu</h3>
-          <p>Metin+ses+görsel+video+sinyal birleşik inceleme ve bağlam koruma.</p>
+          <h3 data-i18n="card_fusion_title">Çoklu Veri Füzyonu</h3>
+          <p data-i18n="card_fusion_desc">Metin+ses+görsel+video+sinyal birleşik inceleme ve bağlam koruma.</p>
         </div>
         <div class="card">
           <i class="fa-solid fa-brain"></i>
-          <h3>LLM + RAG</h3>
-          <p>Kaynak dayanaklı cevaplar, alıntı ve dosya‑kısıtlama desteği.</p>
+          <h3 data-i18n="card_rag_title">LLM + RAG</h3>
+          <p data-i18n="card_rag_desc">Kaynak dayanaklı cevaplar, alıntı ve dosya‑kısıtlama desteği.</p>
         </div>
         <div class="card">
           <i class="fa-solid fa-user-shield"></i>
-          <h3>Güvenlik</h3>
-          <p>RBAC, denetim izi, offline/air‑gapped kurulum.</p>
+          <h3 data-i18n="card_sec_title">Güvenlik</h3>
+          <p data-i18n="card_sec_desc">RBAC, denetim izi, offline/air‑gapped kurulum.</p>
         </div>
       </div>
     </div>
@@ -251,90 +228,90 @@
 
   <section class="section" id="features">
     <div class="container">
-      <h2>Güçlü Özellikler</h2>
-      <p class="sub">Verinizi operasyonel içgörüye dönüştüren SAKAI yetenekleri</p>
+      <h2 data-i18n="features_title">Güçlü Özellikler</h2>
+      <p class="sub" data-i18n="features_sub">Verinizi operasyonel içgörüye dönüştüren SAKAI yetenekleri</p>
 
       <div class="grid">
-        <article class="feature fade-in-element" aria-label="Çoklu veri füzyonu">
+        <article class="feature fade-in-element" aria-label="Çoklu veri füzyonu" data-i18n-aria="feature1_aria">
           <i class="fa-solid fa-layer-group"></i>
-          <h3>Çoklu Veri Füzyonu</h3>
-          <p>Farklı kaynakları tek bağlamda birleştirip çapraz arama ve korelasyon yapın.</p>
+          <h3 data-i18n="feature1_title">Çoklu Veri Füzyonu</h3>
+          <p data-i18n="feature1_desc">Farklı kaynakları tek bağlamda birleştirip çapraz arama ve korelasyon yapın.</p>
         </article>
-        <article class="feature fade-in-element" aria-label="Doğal dil sorgulama">
+        <article class="feature fade-in-element" aria-label="Doğal dil sorgulama" data-i18n-aria="feature2_aria">
           <i class="fa-solid fa-comments"></i>
-          <h3>Doğal Dil Sorgulama</h3>
-          <p>Chat arayüzünde Türkçe dahil 100+ dil desteği ile anında cevap alın.</p>
+          <h3 data-i18n="feature2_title">Doğal Dil Sorgulama</h3>
+          <p data-i18n="feature2_desc">Chat arayüzünde Türkçe dahil 100+ dil desteği ile anında cevap alın.</p>
         </article>
-        <article class="feature fade-in-element" aria-label="Görsel ve video analiz">
+        <article class="feature fade-in-element" aria-label="Görsel ve video analiz" data-i18n-aria="feature3_aria">
           <i class="fa-solid fa-image"></i>
-          <h3>Görsel & Video Analizi</h3>
-          <p> Nesne tanıma, sahne/olay segmentasyonu.</p>
+          <h3 data-i18n="feature3_title">Görsel & Video Analizi</h3>
+          <p data-i18n="feature3_desc">Nesne tanıma, sahne/olay segmentasyonu.</p>
         </article>
-        <article class="feature fade-in-element" aria-label="Ses ve çağrı analitiği">
+        <article class="feature fade-in-element" aria-label="Ses ve çağrı analitiği" data-i18n-aria="feature4_aria">
           <i class="fa-solid fa-microphone-lines"></i>
-          <h3>Ses & Çağrı Analitiği</h3>
-          <p>STT, konuşmacı ayrımı, duygu/niyet analizi, kalite metrikleri.</p>
+          <h3 data-i18n="feature4_title">Ses & Çağrı Analitiği</h3>
+          <p data-i18n="feature4_desc">STT, konuşmacı ayrımı, duygu/niyet analizi, kalite metrikleri.</p>
         </article>
-        <article class="feature fade-in-element" aria-label="Tablo ve veri ambarı">
+        <article class="feature fade-in-element" aria-label="Tablo ve veri ambarı" data-i18n-aria="feature5_aria">
           <i class="fa-solid fa-table"></i>
-          <h3>Tablo & BI Köprüsü</h3>
-          <p>SQL/CSV/Parquet içe aktarım, metrik kartları ve dashboard köprüsü.</p>
+          <h3 data-i18n="feature5_title">Tablo & BI Köprüsü</h3>
+          <p data-i18n="feature5_desc">SQL/CSV/Parquet içe aktarım, metrik kartları ve dashboard köprüsü.</p>
         </article>
-        <article class="feature fade-in-element" aria-label="Güvenlik ve denetim">
+        <article class="feature fade-in-element" aria-label="Güvenlik ve denetim" data-i18n-aria="feature6_aria">
           <i class="fa-solid fa-shield-halved"></i>
-          <h3>Güvenlik</h3>
-          <p>RBAC, SSO, denetim günlüğü ve hassas veri maskeleme.</p>
+          <h3 data-i18n="feature6_title">Güvenlik</h3>
+          <p data-i18n="feature6_desc">RBAC, SSO, denetim günlüğü ve hassas veri maskeleme.</p>
         </article>
       </div>
 
-      <div class="integrations" aria-label="Entegrasyonlar">
-        <span class="pill"><i class="fa-brands fa-aws"></i> S3 / MinIO</span>
-        <span class="pill"><i class="fa-solid fa-database"></i> PostgreSQL / pgvector</span>
-        <span class="pill"><i class="fa-brands fa-docker"></i> Docker / K8s</span>
-        <span class="pill"><i class="fa-solid fa-brain"></i> RAG</span>
-        <span class="pill"><i class="fa-solid fa-robot"></i> LLM</span>
-        <span class="pill"><i class="fa-solid fa-volume-high"></i> TTS</span>
-        <span class="pill"><i class="fa-brands fa-python"></i> PyTorch</span>
-        <span class="pill"><i class="fa-solid fa-stream"></i> Kafka</span>
-        <span class="pill"><i class="fa-brands fa-python"></i> Python SDK</span>
+      <div class="integrations" aria-label="Entegrasyonlar" data-i18n-aria="integrations_aria">
+        <span class="pill"> <i class="fa-brands fa-aws"></i> <span data-i18n="int_aws">S3 / MinIO</span></span>
+        <span class="pill"> <i class="fa-solid fa-database"></i> <span data-i18n="int_pg">PostgreSQL / pgvector</span></span>
+        <span class="pill"> <i class="fa-brands fa-docker"></i> <span data-i18n="int_docker">Docker / K8s</span></span>
+        <span class="pill"> <i class="fa-solid fa-brain"></i> <span data-i18n="int_rag">RAG</span></span>
+        <span class="pill"> <i class="fa-solid fa-robot"></i> <span data-i18n="int_llm">LLM</span></span>
+        <span class="pill"> <i class="fa-solid fa-volume-high"></i> <span data-i18n="int_tts">TTS</span></span>
+        <span class="pill"> <i class="fa-brands fa-python"></i> <span data-i18n="int_torch">PyTorch</span></span>
+        <span class="pill"> <i class="fa-solid fa-stream"></i> <span data-i18n="int_kafka">Kafka</span></span>
+        <span class="pill"> <i class="fa-brands fa-python"></i> <span data-i18n="int_sdk">Python SDK</span></span>
       </div>
     </div>
   </section>
 
   <section class="section" id="modalities">
     <div class="container">
-      <h2>Desteklenen Veri Tipleri</h2>
-      <p class="sub">Tek platform, farklı veri akışları</p>
+      <h2 data-i18n="mods_title">Desteklenen Veri Tipleri</h2>
+      <p class="sub" data-i18n="mods_sub">Tek platform, farklı veri akışları</p>
       <div class="modalities">
         <div class="mod fade-in-element">
           <i class="fa-regular fa-file-lines"></i>
-          <strong>Metin</strong>
-          <small>PDF, Word, HTML, e‑posta, Markdown</small>
+          <strong data-i18n="mod_text">Metin</strong>
+          <small data-i18n="mod_text_desc">PDF, Word, HTML, e‑posta, Markdown</small>
         </div>
         <div class="mod fade-in-element">
           <i class="fa-regular fa-image"></i>
-          <strong>Görsel</strong>
-          <small>OCR, EXIF çıkarımı</small>
+          <strong data-i18n="mod_image">Görsel</strong>
+          <small data-i18n="mod_image_desc">OCR, EXIF çıkarımı</small>
         </div>
         <div class="mod fade-in-element">
           <i class="fa-solid fa-video"></i>
-          <strong>Video</strong>
-          <small>Nesne tespiti, sahne/olay analizi, konuşma çıkarımı</small>
+          <strong data-i18n="mod_video">Video</strong>
+          <small data-i18n="mod_video_desc">Nesne tespiti, sahne/olay analizi, konuşma çıkarımı</small>
         </div>
         <div class="mod fade-in-element">
           <i class="fa-solid fa-microphone"></i>
-          <strong>Ses</strong>
-          <small>STT, konuşmacı ayrımı (diarization), duygu/niyet</small>
+          <strong data-i18n="mod_audio">Ses</strong>
+          <small data-i18n="mod_audio_desc">STT, konuşmacı ayrımı (diarization), duygu/niyet</small>
         </div>
         <div class="mod fade-in-element">
           <i class="fa-solid fa-satellite-dish"></i>
-          <strong>Sinyal</strong>
-          <small>RF/IoT/telm. spektrum analizi, anomali tespiti</small>
+          <strong data-i18n="mod_signal">Sinyal</strong>
+          <small data-i18n="mod_signal_desc">RF/IoT/telm. spektrum analizi, anomali tespiti</small>
         </div>
         <div class="mod fade-in-element">
           <i class="fa-solid fa-table"></i>
-          <strong>Tablo</strong>
-          <small>CSV, Excel, SQL sonuçları, metrik panelleri</small>
+          <strong data-i18n="mod_table">Tablo</strong>
+          <small data-i18n="mod_table_desc">CSV, Excel, SQL sonuçları, metrik panelleri</small>
         </div>
       </div>
     </div>
@@ -342,78 +319,78 @@
 
   <section class="section" id="demo">
     <div class="container">
-      <h2>Hızlı Demo</h2>
-      <p class="sub">RAG destekli SAKAI sohbet arayüzünden örnek etkileşim</p>
+      <h2 data-i18n="demo_title">Hızlı Demo</h2>
+      <p class="sub" data-i18n="demo_sub">RAG destekli SAKAI sohbet arayüzünden örnek etkileşim</p>
 
       <div class="demo-wrap">
         <div class="demo-chat">
-          <div class="chat-head"><i class="fa-regular fa-comments"></i> Örnek Sohbet</div>
+          <div class="chat-head"><i class="fa-regular fa-comments"></i> <span data-i18n="chat_head">Örnek Sohbet</span></div>
           <div class="msgs" aria-live="polite">
-            <div class="m ai">
+            <div class="m ai" data-i18n="chat_ai_1">
               Merhaba! “Q2_2025_GelirTablosu.xlsx” ve “Earnings_Call_2025Q2.pdf” dosyalarıyla çalışıyorum. İlk sorunuz nedir?
             </div>
 
-            <div class="m user">
+            <div class="m user" data-i18n="chat_user_1">
               Q2 net satış ve brüt marj kaç?
             </div>
-            <div class="m ai">
+            <div class="m ai" data-i18n="chat_ai_2">
               Net satış: <strong>₺1.24B</strong> · Brüt marj: <strong>%36.8</strong>.<br>
               <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “GelirTablosu”!B12,C18</em>
             </div>
 
-            <div class="m user">
+            <div class="m user" data-i18n="chat_user_2">
               Net kâr marjı ve EBITDA nedir?
             </div>
-            <div class="m ai">
+            <div class="m ai" data-i18n="chat_ai_3">
               Net kâr marjı: <strong>%15.1</strong> · EBITDA: <strong>₺238M</strong>.<br>
               <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Özet”!D6,D9</em>
             </div>
 
-            <div class="m user">
+            <div class="m user" data-i18n="chat_user_3">
               Operasyonel giderlerin % değişimi?
             </div>
-            <div class="m ai">
+            <div class="m ai" data-i18n="chat_ai_4">
               Q/Q bazda <strong>%+6.3</strong> artış (özellikle S&M kalemi).<br>
               <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Giderler”!B7:D12</em>
             </div>
 
-            <div class="m user">
+            <div class="m user" data-i18n="chat_user_4">
               Kur etkisi (FX) net kâra katkı?
             </div>
-            <div class="m ai">
+            <div class="m ai" data-i18n="chat_ai_5">
               FX net etkisi: <strong>₺+18.6M</strong> (elde edilen kur farkı gelirleri).<br>
               <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Diğer Gelir/Gider”!C5</em>
             </div>
 
-            <div class="m user">
+            <div class="m user" data-i18n="chat_user_5">
               Q3 için brüt marj rehberi?
             </div>
-            <div class="m ai">
+            <div class="m ai" data-i18n="chat_ai_6">
               CFO rehberi: <strong>+80‑120 bps</strong> iyileşme beklentisi.<br>
               <em>Kaynak: Earnings_Call_2025Q2.pdf → s.3 (Soru‑Cevap)</em>
             </div>
 
-            <div class="m user">
+            <div class="m user" data-i18n="chat_user_6">
               Serbest nakit akımı (FCF) ve borç/özkaynak oranı?
             </div>
-            <div class="m ai">
+            <div class="m ai" data-i18n="chat_ai_7">
               FCF: <strong>₺126M</strong> · Borç/Özkaynak: <strong>0.42x</strong>.<br>
               <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Nakit Akımı”!E14; “Bilanço”!C22,C34</em>
             </div>
           </div>
           </div>
         <div class="demo-box">
-          <h3 style="margin-bottom:8px">Neden SAKAI?</h3>
+          <h3 style="margin-bottom:8px" data-i18n="why_title">Neden SAKAI?</h3>
           <ul style="color:var(--muted);display:grid;gap:10px">
-            <li><i class="fa-solid fa-check"></i> Dosya-kısıtlı cevap ve kaynak alıntısı ile <strong>halüsinasyon azaltma</strong>.</li>
-            <li><i class="fa-solid fa-check"></i> <strong>On-prem / offline</strong> kurulum; veriniz kurum dışına çıkmaz.</li>
-            <li><i class="fa-solid fa-check"></i> <strong>Rol bazlı erişim</strong> ve kullanıcıya özel paneller.</li>
-            <li><i class="fa-solid fa-check"></i> <strong>Plug & Play</strong> entegrasyon: Kafka, Elastic, PostgreSQL…</li>
-            <li><i class="fa-solid fa-check"></i> <strong>Çoklu veri türü analizi</strong>: metin, görsel, ses, video, sinyal, tablo.</li>
-            <li><i class="fa-solid fa-check"></i> <strong>Gerçek zamanlı sorgu yanıtı</strong> ve büyük veri desteği.</li>
-            <li><i class="fa-solid fa-check"></i> <strong>Kuruma özel LLM eğitimi</strong> ile daha doğru ve bağlama uygun yanıtlar.</li>
-            <li><i class="fa-solid fa-check"></i> <strong>Endüstri standartlarında güvenlik</strong>: şifreleme, loglama, erişim kontrolü.</li>
-            <li><i class="fa-solid fa-check"></i> <strong>Modüler mimari</strong> ile ihtiyaca göre özelleştirilebilir yapı.</li>
+            <li data-i18n="why_1"><i class="fa-solid fa-check"></i> Dosya-kısıtlı cevap ve kaynak alıntısı ile <strong>halüsinasyon azaltma</strong>.</li>
+            <li data-i18n="why_2"><i class="fa-solid fa-check"></i> <strong>On-prem / offline</strong> kurulum; veriniz kurum dışına çıkmaz.</li>
+            <li data-i18n="why_3"><i class="fa-solid fa-check"></i> <strong>Rol bazlı erişim</strong> ve kullanıcıya özel paneller.</li>
+            <li data-i18n="why_4"><i class="fa-solid fa-check"></i> <strong>Plug & Play</strong> entegrasyon: Kafka, Elastic, PostgreSQL…</li>
+            <li data-i18n="why_5"><i class="fa-solid fa-check"></i> <strong>Çoklu veri türü analizi</strong>: metin, görsel, ses, video, sinyal, tablo.</li>
+            <li data-i18n="why_6"><i class="fa-solid fa-check"></i> <strong>Gerçek zamanlı sorgu yanıtı</strong> ve büyük veri desteği.</li>
+            <li data-i18n="why_7"><i class="fa-solid fa-check"></i> <strong>Kuruma özel LLM eğitimi</strong> ile daha doğru ve bağlama uygun yanıtlar.</li>
+            <li data-i18n="why_8"><i class="fa-solid fa-check"></i> <strong>Endüstri standartlarında güvenlik</strong>: şifreleme, loglama, erişim kontrolü.</li>
+            <li data-i18n="why_9"><i class="fa-solid fa-check"></i> <strong>Modüler mimari</strong> ile ihtiyaca göre özelleştirilebilir yapı.</li>
           </ul>
         </div>
       </div>
@@ -422,21 +399,21 @@
 
   <section class="section" id="contact">
     <div class="container">
-      <h2>İletişime Geç</h2>
-      <p class="sub">Kurumunuz için canlı demo ve fiyatlandırma bilgisi almak için bizimle iletişime geçin</p>
+      <h2 data-i18n="contact_title">İletişime Geç</h2>
+      <p class="sub" data-i18n="contact_sub">Kurumunuz için canlı demo ve fiyatlandırma bilgisi almak için bizimle iletişime geçin</p>
 
       <div class="feature" style="grid-column:span 12; text-align:center; padding:24px; margin-top:24px">
         <p style="margin-bottom:12px; font-size:1.05rem; color:var(--text)">
           <i class="fa-regular fa-envelope"></i>
-          <strong>E-posta:</strong> <a href="mailto:berkanttugberk@gmail.com" style="color:var(--primary-2)">berkanttugberk@gmail.com</a>
+          <strong data-i18n="email_label">E-posta:</strong> <a href="mailto:berkanttugberk@gmail.com" style="color:var(--primary-2)">berkanttugberk@gmail.com</a>
         </p>
         <p style="margin-bottom:12px; font-size:1.05rem; color:var(--text)">
           <i class="fa-regular fa-envelope"></i>
-          <strong>E-posta:</strong> <a href="mailto:turgutmetekagan@gmail.com" style="color:var(--primary-2)">turgutmetekagan@gmail.com</a>
+          <strong data-i18n="email_label">E-posta:</strong> <a href="mailto:turgutmetekagan@gmail.com" style="color:var(--primary-2)">turgutmetekagan@gmail.com</a>
         </p>
 
         <a href="mailto:berkanttugberk@gmail.com" class="btn btn-primary">
-          <i class="fa-regular fa-paper-plane"></i> Mail Gönder
+          <i class="fa-regular fa-paper-plane"></i> <span data-i18n="contact_cta">Mail Gönder</span>
         </a>
       </div>
     </div>
@@ -444,11 +421,11 @@
 
   <footer class="footer">
     <div class="container" style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap">
-      <div>© <span id="y"></span> SAKAI • Tüm hakları saklıdır.</div>
+      <div><span data-i18n="copyright">©</span> <span id="y"></span> SAKAI • <span data-i18n="rights">Tüm hakları saklıdır.</span></div>
       <div style="display:flex;gap:14px">
-        <a href="#" aria-label="Gizlilik">Gizlilik</a>
-        <a href="#" aria-label="KVKK">KVKK</a>
-        <a href="#" aria-label="Kullanım Şartları">Kullanım Şartları</a>
+        <a href="#" aria-label="Gizlilik" data-i18n="footer_privacy">Gizlilik</a>
+        <a href="#" aria-label="KVKK" data-i18n="footer_kvkk">KVKK</a>
+        <a href="#" aria-label="Kullanım Şartları" data-i18n="footer_terms">Kullanım Şartları</a>
       </div>
     </div>
   </footer>
@@ -477,30 +454,178 @@
     });
 
     // Intersection Observer for animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } }); }, observerOptions);
+    document.querySelectorAll('.fade-in-element').forEach(el => { observer.observe(el); });
+    setTimeout(() => { document.querySelectorAll('.fade-in-element:not(.visible)').forEach(el => { el.classList.add('visible'); }); }, 1000);
+
+    // ======== I18N ========
+    const i18n = {
+      tr: {
+        meta_title: 'SAKAI – Çoklu Veri Analiz Platformu',
+        meta_desc: 'SAKAI: metin, görsel, video, ses, sinyal ve tablo verilerini tek platformda birleştiren yapay zekâ destekli veri analiz yazılımı.',
+        nav_aria: 'Ana gezinme',
+        brand_aria: 'SAKAI ana sayfa',
+        primary_nav: 'Birincil',
+        burger_aria: 'Menüyü aç/kapat',
+        lang_switch: 'Dil seçici',
+        nav_features: 'Özellikler', nav_modalities: 'Veri Tipleri', nav_demo: 'Demo', nav_contact: 'İletişim',
+        eyebrow: 'Çoklu Veri Analitiği • Offline destek',
+        hero_title: 'Kurumsal verinizi <span style="background:linear-gradient(90deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent">tek platformda</span> anlayın ve hızla aksiyona dönüştürün.',
+        hero_desc: 'SAKAI; metin, görsel, video, ses, sinyal ve tabloları bir araya getirir. RAG ve LLM destekli arayüz ile doğal dilde soru sorun, güvenli ve yerinde (on‑prem) çalıştırın.',
+        badge_privacy: '<i class="fa-solid fa-lock"></i> Veri sizde kalsın',
+        badge_plug: '<i class="fa-solid fa-diagram-project"></i> Plug & Play entegrasyon',
+        badge_rt: '<i class="fa-solid fa-gauge-high"></i> Gerçek zamanlı analiz',
+        cta_demo: 'Hızlı Demo', cta_features: 'Özelliklere göz at', cta_quote: 'Teklif Al',
+        card_fusion_title: 'Çoklu Veri Füzyonu', card_fusion_desc: 'Metin+ses+görsel+video+sinyal birleşik inceleme ve bağlam koruma.',
+        card_rag_title: 'LLM + RAG', card_rag_desc: 'Kaynak dayanaklı cevaplar, alıntı ve dosya‑kısıtlama desteği.',
+        card_sec_title: 'Güvenlik', card_sec_desc: 'RBAC, denetim izi, offline/air‑gapped kurulum.',
+        features_title: 'Güçlü Özellikler', features_sub: 'Verinizi operasyonel içgörüye dönüştüren SAKAI yetenekleri',
+        feature1_aria:'Çoklu veri füzyonu', feature1_title:'Çoklu Veri Füzyonu', feature1_desc:'Farklı kaynakları tek bağlamda birleştirip çapraz arama ve korelasyon yapın.',
+        feature2_aria:'Doğal dil sorgulama', feature2_title:'Doğal Dil Sorgulama', feature2_desc:'Chat arayüzünde Türkçe dahil 100+ dil desteği ile anında cevap alın.',
+        feature3_aria:'Görsel ve video analiz', feature3_title:'Görsel & Video Analizi', feature3_desc:'Nesne tanıma, sahne/olay segmentasyonu.',
+        feature4_aria:'Ses ve çağrı analitiği', feature4_title:'Ses & Çağrı Analitiği', feature4_desc:'STT, konuşmacı ayrımı, duygu/niyet analizi, kalite metrikleri.',
+        feature5_aria:'Tablo ve veri ambarı', feature5_title:'Tablo & BI Köprüsü', feature5_desc:'SQL/CSV/Parquet içe aktarım, metrik kartları ve dashboard köprüsü.',
+        feature6_aria:'Güvenlik ve denetim', feature6_title:'Güvenlik', feature6_desc:'RBAC, SSO, denetim günlüğü ve hassas veri maskeleme.',
+        integrations_aria:'Entegrasyonlar',
+        int_aws:'S3 / MinIO', int_pg:'PostgreSQL / pgvector', int_docker:'Docker / K8s', int_rag:'RAG', int_llm:'LLM', int_tts:'TTS', int_torch:'PyTorch', int_kafka:'Kafka', int_sdk:'Python SDK',
+        mods_title:'Desteklenen Veri Tipleri', mods_sub:'Tek platform, farklı veri akışları',
+        mod_text:'Metin', mod_text_desc:'PDF, Word, HTML, e‑posta, Markdown',
+        mod_image:'Görsel', mod_image_desc:'OCR, EXIF çıkarımı',
+        mod_video:'Video', mod_video_desc:'Nesne tespiti, sahne/olay analizi, konuşma çıkarımı',
+        mod_audio:'Ses', mod_audio_desc:'STT, konuşmacı ayrımı (diarization), duygu/niyet',
+        mod_signal:'Sinyal', mod_signal_desc:'RF/IoT/telm. spektrum analizi, anomali tespiti',
+        mod_table:'Tablo', mod_table_desc:'CSV, Excel, SQL sonuçları, metrik panelleri',
+        demo_title:'Hızlı Demo', demo_sub:'RAG destekli SAKAI sohbet arayüzünden örnek etkileşim',
+        chat_head:'Örnek Sohbet',
+        chat_ai_1:'Merhaba! “Q2_2025_GelirTablosu.xlsx” ve “Earnings_Call_2025Q2.pdf” dosyalarıyla çalışıyorum. İlk sorunuz nedir?',
+        chat_user_1:'Q2 net satış ve brüt marj kaç?',
+        chat_ai_2:'Net satış: <strong>₺1.24B</strong> · Brüt marj: <strong>%36.8</strong>.<br><em>Kaynak: Q2_2025_GelirTablosu.xlsx → “GelirTablosu”!B12,C18</em>',
+        chat_user_2:'Net kâr marjı ve EBITDA nedir?',
+        chat_ai_3:'Net kâr marjı: <strong>%15.1</strong> · EBITDA: <strong>₺238M</strong>.<br><em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Özet”!D6,D9</em>',
+        chat_user_3:'Operasyonel giderlerin % değişimi?',
+        chat_ai_4:'Q/Q bazda <strong>%+6.3</strong> artış (özellikle S&M kalemi).<br><em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Giderler”!B7:D12</em>',
+        chat_user_4:'Kur etkisi (FX) net kâra katkı?',
+        chat_ai_5:'FX net etkisi: <strong>₺+18.6M</strong> (elde edilen kur farkı gelirleri).<br><em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Diğer Gelir/Gider”!C5</em>',
+        chat_user_5:'Q3 için brüt marj rehberi?',
+        chat_ai_6:'CFO rehberi: <strong>+80‑120 bps</strong> iyileşme beklentisi.<br><em>Kaynak: Earnings_Call_2025Q2.pdf → s.3 (Soru‑Cevap)</em>',
+        chat_user_6:'Serbest nakit akımı (FCF) ve borç/özkaynak oranı?',
+        chat_ai_7:'FCF: <strong>₺126M</strong> · Borç/Özkaynak: <strong>0.42x</strong>.<br><em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Nakit Akımı”!E14; “Bilanço”!C22,C34</em>',
+        why_title:'Neden SAKAI?',
+        why_1:'<i class="fa-solid fa-check"></i> Dosya-kısıtlı cevap ve kaynak alıntısı ile <strong>halüsinasyon azaltma</strong>.',
+        why_2:'<i class="fa-solid fa-check"></i> <strong>On-prem / offline</strong> kurulum; veriniz kurum dışına çıkmaz.',
+        why_3:'<i class="fa-solid fa-check"></i> <strong>Rol bazlı erişim</strong> ve kullanıcıya özel paneller.',
+        why_4:'<i class="fa-solid fa-check"></i> <strong>Plug & Play</strong> entegrasyon: Kafka, Elastic, PostgreSQL…',
+        why_5:'<i class="fa-solid fa-check"></i> <strong>Çoklu veri türü analizi</strong>: metin, görsel, ses, video, sinyal, tablo.',
+        why_6:'<i class="fa-solid fa-check"></i> <strong>Gerçek zamanlı sorgu yanıtı</strong> ve büyük veri desteği.',
+        why_7:'<i class="fa-solid fa-check"></i> <strong>Kuruma özel LLM eğitimi</strong> ile daha doğru ve bağlama uygun yanıtlar.',
+        why_8:'<i class="fa-solid fa-check"></i> <strong>Endüstri standartlarında güvenlik</strong>: şifreleme, loglama, erişim kontrolü.',
+        why_9:'<i class="fa-solid fa-check"></i> <strong>Modüler mimari</strong> ile ihtiyaca göre özelleştirilebilir yapı.',
+        contact_title:'İletişime Geç', contact_sub:'Kurumunuz için canlı demo ve fiyatlandırma bilgisi almak için bizimle iletişime geçin',
+        email_label:'E-posta:', contact_cta:'Mail Gönder',
+        copyright:'©', rights:'Tüm hakları saklıdır.',
+        footer_privacy:'Gizlilik', footer_kvkk:'KVKK', footer_terms:'Kullanım Şartları'
+      },
+      en: {
+        meta_title: 'SAKAI – Multimodal Data Analytics Platform',
+        meta_desc: 'SAKAI: an AI‑powered analytics platform that unifies text, images, video, audio, signal and tabular data in one place.',
+        nav_aria: 'Main navigation',
+        brand_aria: 'SAKAI home',
+        primary_nav: 'Primary',
+        burger_aria: 'Open/close menu',
+        lang_switch: 'Language picker',
+        nav_features: 'Features', nav_modalities: 'Data Types', nav_demo: 'Demo', nav_contact: 'Contact',
+        eyebrow: 'Multimodal Analytics • Offline support',
+        hero_title: 'Understand your enterprise data on <span style="background:linear-gradient(90deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent">a single platform</span> and turn it into action fast.',
+        hero_desc: 'SAKAI unifies text, image, video, audio, signal and tables. Ask in natural language with an LLM + RAG interface; deploy securely on‑prem and offline.',
+        badge_privacy: '<i class="fa-solid fa-lock"></i> Keep data in‑house',
+        badge_plug: '<i class="fa-solid fa-diagram-project"></i> Plug & Play integration',
+        badge_rt: '<i class="fa-solid fa-gauge-high"></i> Real‑time analytics',
+        cta_demo: 'Quick Demo', cta_features: 'Explore Features', cta_quote: 'Get a Quote',
+        card_fusion_title: 'Multimodal Fusion', card_fusion_desc: 'Unified inspection across text+audio+image+video+signal with context preservation.',
+        card_rag_title: 'LLM + RAG', card_rag_desc: 'Source‑grounded answers with citations and file‑scoped responses.',
+        card_sec_title: 'Security', card_sec_desc: 'RBAC, audit trail, offline/air‑gapped deployment.',
+        features_title: 'Powerful Features', features_sub: 'SAKAI capabilities that turn data into operational insight',
+        feature1_aria:'Multimodal fusion', feature1_title:'Multimodal Fusion', feature1_desc:'Merge sources into one context to cross‑search and correlate.',
+        feature2_aria:'Natural language querying', feature2_title:'Natural Language Querying', feature2_desc:'Instant answers in 100+ languages including Turkish.',
+        feature3_aria:'Image and video analytics', feature3_title:'Image & Video Analytics', feature3_desc:'Object detection, scene/event segmentation.',
+        feature4_aria:'Audio and call analytics', feature4_title:'Audio & Call Analytics', feature4_desc:'STT, speaker diarization, sentiment/intent, QA metrics.',
+        feature5_aria:'Tables and data warehouse', feature5_title:'Tables & BI Bridge', feature5_desc:'Import SQL/CSV/Parquet, metric cards and dashboard bridge.',
+        feature6_aria:'Security and audit', feature6_title:'Security', feature6_desc:'RBAC, SSO, audit logging and sensitive data masking.',
+        integrations_aria:'Integrations',
+        int_aws:'S3 / MinIO', int_pg:'PostgreSQL / pgvector', int_docker:'Docker / K8s', int_rag:'RAG', int_llm:'LLM', int_tts:'TTS', int_torch:'PyTorch', int_kafka:'Kafka', int_sdk:'Python SDK',
+        mods_title:'Supported Data Types', mods_sub:'One platform, many streams',
+        mod_text:'Text', mod_text_desc:'PDF, Word, HTML, email, Markdown',
+        mod_image:'Image', mod_image_desc:'OCR, EXIF extraction',
+        mod_video:'Video', mod_video_desc:'Object detection, scene/event analysis, speech extraction',
+        mod_audio:'Audio', mod_audio_desc:'STT, speaker diarization, sentiment/intent',
+        mod_signal:'Signal', mod_signal_desc:'RF/IoT/telemetry spectrum analysis, anomaly detection',
+        mod_table:'Table', mod_table_desc:'CSV, Excel, SQL results, metric panels',
+        demo_title:'Quick Demo', demo_sub:'Sample interaction from SAKAI\'s RAG‑powered chat UI',
+        chat_head:'Sample Chat',
+        chat_ai_1:'Hello! I\'m working with “Q2_2025_IncomeStatement.xlsx” and “Earnings_Call_2025Q2.pdf”. What\'s your first question?',
+        chat_user_1:'What are Q2 net sales and gross margin?',
+        chat_ai_2:'Net sales: <strong>₺1.24B</strong> · Gross margin: <strong>36.8%</strong>.<br><em>Source: Q2_2025_IncomeStatement.xlsx → “IncomeStatement”!B12,C18</em>',
+        chat_user_2:'Net profit margin and EBITDA?',
+        chat_ai_3:'Net profit margin: <strong>15.1%</strong> · EBITDA: <strong>₺238M</strong>.<br><em>Source: Q2_2025_IncomeStatement.xlsx → “Summary”!D6,D9</em>',
+        chat_user_3:'% change in operating expenses?',
+        chat_ai_4:'<strong>+6.3%</strong> Q/Q (mainly S&M).<br><em>Source: Q2_2025_IncomeStatement.xlsx → “Expenses”!B7:D12</em>',
+        chat_user_4:'FX impact on net income?',
+        chat_ai_5:'FX net impact: <strong>₺+18.6M</strong> (currency gain).<br><em>Source: Q2_2025_IncomeStatement.xlsx → “Other Inc/Exp”!C5</em>',
+        chat_user_5:'Gross margin guide for Q3?',
+        chat_ai_6:'CFO guidance: <strong>+80‑120 bps</strong> improvement expected.<br><em>Source: Earnings_Call_2025Q2.pdf → p.3 (Q&A)</em>',
+        chat_user_6:'Free cash flow (FCF) and debt/equity?',
+        chat_ai_7:'FCF: <strong>₺126M</strong> · Debt/Equity: <strong>0.42x</strong>.<br><em>Source: Q2_2025_IncomeStatement.xlsx → “Cash Flow”!E14; “Balance Sheet”!C22,C34</em>',
+        why_title:'Why SAKAI?',
+        why_1:'<i class="fa-solid fa-check"></i> <strong>Fewer hallucinations</strong> via file‑scoped answers and citations.',
+        why_2:'<i class="fa-solid fa-check"></i> <strong>On‑prem / offline</strong> deployment; your data stays inside.',
+        why_3:'<i class="fa-solid fa-check"></i> <strong>Role‑based access</strong> and user‑specific dashboards.',
+        why_4:'<i class="fa-solid fa-check"></i> <strong>Plug & Play</strong> integrations: Kafka, Elastic, PostgreSQL…',
+        why_5:'<i class="fa-solid fa-check"></i> <strong>Multimodal analytics</strong>: text, image, audio, video, signal, tables.',
+        why_6:'<i class="fa-solid fa-check"></i> <strong>Real‑time responses</strong> and big‑data support.',
+        why_7:'<i class="fa-solid fa-check"></i> <strong>Organization‑tuned LLMs</strong> for accuracy and context fit.',
+        why_8:'<i class="fa-solid fa-check"></i> <strong>Enterprise‑grade security</strong>: encryption, logging, access control.',
+        why_9:'<i class="fa-solid fa-check"></i> <strong>Modular architecture</strong> to tailor to your needs.',
+        contact_title:'Get in Touch', contact_sub:'Contact us for a live demo and pricing tailored to your organization',
+        email_label:'Email:', contact_cta:'Send Email',
+        copyright:'©', rights:'All rights reserved.',
+        footer_privacy:'Privacy', footer_kvkk:'PDPL', footer_terms:'Terms of Use'
+      }
     };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+    function applyLang(lang){
+      // Update text-bearing nodes
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const key = el.getAttribute('data-i18n');
+        if(i18n[lang][key] !== undefined){ el.innerHTML = i18n[lang][key]; }
       });
-    }, observerOptions);
-
-    // Observe all fade-in elements
-    document.querySelectorAll('.fade-in-element').forEach(el => {
-      observer.observe(el);
-    });
-
-    // Fallback: Make elements visible after 1 second if intersection observer fails
-    setTimeout(() => {
-      document.querySelectorAll('.fade-in-element:not(.visible)').forEach(el => {
-        el.classList.add('visible');
+      // Update ARIA labels
+      document.querySelectorAll('[data-i18n-aria]').forEach(el=>{
+        const key = el.getAttribute('data-i18n-aria');
+        if(i18n[lang][key] !== undefined){ el.setAttribute('aria-label', i18n[lang][key]); }
       });
-    }, 1000);
+      // Update meta title/description
+      document.title = i18n[lang].meta_title;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if(metaDesc) metaDesc.setAttribute('content', i18n[lang].meta_desc);
+      // Update html lang
+      document.documentElement.lang = (lang === 'tr' ? 'tr' : 'en');
+      // Toggle button states
+      document.getElementById('btn-tr').classList.toggle('active', lang==='tr');
+      document.getElementById('btn-tr').setAttribute('aria-pressed', lang==='tr');
+      document.getElementById('btn-en').classList.toggle('active', lang==='en');
+      document.getElementById('btn-en').setAttribute('aria-pressed', lang==='en');
+      // Persist
+      localStorage.setItem('sakai_lang', lang);
+    }
+
+    // Init
+    const initLang = localStorage.getItem('sakai_lang') || (navigator.language?.startsWith('tr') ? 'tr' : 'en');
+    applyLang(initLang);
+
+    // Handlers
+    document.getElementById('btn-tr').addEventListener('click', ()=>applyLang('tr'));
+    document.getElementById('btn-en').addEventListener('click', ()=>applyLang('en'));
   </script>
 
   <script type="text/javascript">
