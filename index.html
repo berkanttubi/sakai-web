@@ -3,181 +3,417 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SAKAI – Çoklu Veri Analiz Platformu</title>
-  <meta name="description" content="SAKAI: metin, görsel, video, ses, sinyal ve tablo verilerini tek platformda birleştiren yapay zekâ destekli veri analiz yazılımı." />
+  <title>Industrial SAKAI – Üretim Hattı için Yapay Zekâ Katmanı</title>
+  <meta name="description" content="Industrial SAKAI: PLC, SCADA, sensör ve bakım kayıtlarını bir araya getirip kestirimli bakım, anomali tespiti ve kök neden analizi sağlayan yapay zekâ destekli üretim hattı zekâ katmanı." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
   <style>
     :root{
-      /* SAKAI brand */
-      --bg: #0b1020;
-      --bg-2:#0f1630;
+      /* Industrial SAKAI Brand */
+      --bg:#050814;
+      --bg-2:#070b18;
       --text:#e6e9ef;
       --muted:#98a2b3;
       --primary:#7c5cff; /* sakai purple */
       --primary-2:#4aa8ff; /* accent */
-      --ring: rgba(124,92,255,.35);
-      --card:#0c1226;
-      --border:#1f2b4d;
+      --ring:rgba(124,92,255,.35);
+      --card:#080d1f;
+      --border:#1c2744;
       --success:#58d68d;
       --warning:#ffd166;
       --danger:#ff6b6b;
-      --radius: 16px;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --shadow-soft: 0 8px 20px rgba(0,0,0,.2);
-      --grid: radial-gradient(circle at 1px 1px, rgba(255,255,255,.06) 1px, transparent 0) 0 0/24px 24px;
+      --radius:18px;
+      --shadow:0 18px 40px rgba(0,0,0,.5);
+      --shadow-soft:0 10px 26px rgba(0,0,0,.35);
+      --grid:radial-gradient(circle at 1px 1px, rgba(255,255,255,.06) 1px, transparent 0) 0 0/26px 26px;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
-    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
-
+    body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+      overflow-x:hidden;
+    }
     a{color:inherit;text-decoration:none}
-    .container{max-width:1200px;margin-inline:auto;padding:0 24px}
+    .container{max-width:1180px;margin-inline:auto;padding:0 24px}
 
     /* Header */
-    .header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg, rgba(10,14,30,.9), rgba(10,14,30,.6));backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--border)}
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .header{
+      position:sticky;top:0;z-index:50;
+      background:linear-gradient(180deg,rgba(5,8,20,.95),rgba(5,8,20,.7));
+      backdrop-filter:saturate(140%) blur(12px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 0;
+    }
     .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
-    .brand .logo{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:conic-gradient(from 140deg,var(--primary),var(--primary-2));box-shadow:0 6px 18px rgba(124,92,255,.45)}
-    .brand span{font-size:1.1rem}
-    .nav-links{display:flex;gap:22px}
+    .brand .logo{
+      width:160px;height:48px;display:flex;align-items:center;justify-content:flex-start;
+    }
+    .brand img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+    .nav-links{display:flex;gap:22px;font-size:.95rem}
     .nav-links a{color:var(--muted);font-weight:600}
     .nav-links a:hover{color:#fff}
     .nav-cta{display:flex;gap:10px;align-items:center}
-    .btn{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:999px;padding:10px 16px;font-weight:700;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
-    .btn:hover{transform:translateY(-2px)}
-    .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e;border-color:transparent;box-shadow:0 10px 30px rgba(124,92,255,.4)}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      border-radius:999px;
+      padding:9px 16px;
+      border:1px solid var(--border);
+      font-weight:600;font-size:.92rem;
+      background:rgba(13,18,40,.7);
+      transition:.2s ease transform,.2s ease box-shadow,.2s ease background;
+      cursor:pointer;
+      color:var(--text);
+    }
+    .btn:hover{transform:translateY(-1.5px);box-shadow:var(--shadow-soft)}
+    .btn-primary{
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:#050814;border-color:transparent;
+      box-shadow:0 10px 30px rgba(124,92,255,.45);
+    }
     .btn-ghost{background:transparent;color:#fff}
+    .btn-ghost:hover{background:rgba(255,255,255,.02)}
 
-    /* Lang switcher */
-    .lang-switch{display:inline-flex;gap:6px;border:1px solid var(--border);border-radius:999px;padding:4px;background:rgba(255,255,255,.02)}
-    .lang-switch button{border:0;background:transparent;color:var(--muted);font-weight:800;padding:6px 10px;border-radius:999px;cursor:pointer}
-    .lang-switch button.active{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e}
+    /* Lang switch */
+    .lang-switch{
+      display:inline-flex;gap:4px;border:1px solid var(--border);
+      border-radius:999px;padding:3px;background:rgba(255,255,255,.02);
+    }
+    .lang-switch button{
+      border:0;background:transparent;color:var(--muted);font-weight:700;
+      padding:4px 9px;border-radius:999px;cursor:pointer;font-size:.8rem;
+    }
+    .lang-switch button.active{
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:#050814;
+    }
 
-    /* Mobile nav */
-    .burger{display:none;background:none;border:0;color:#fff;font-size:1.25rem}
+    /* Burger */
+    .burger{display:none;background:none;border:0;color:#fff;font-size:1.25rem;cursor:pointer}
 
     /* Hero */
-    .hero{position:relative;isolation:isolate;padding:90px 0 40px;background:
-      radial-gradient(1000px 600px at 20% -10%, rgba(124,92,255,.35), transparent 60%),
-      radial-gradient(900px 500px at 80% -20%, rgba(74,168,255,.25), transparent 60%),
-      var(--grid),
-      linear-gradient(180deg,var(--bg),var(--bg-2))}
-    .hero .inner{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
-    .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-    .hero h1{font-size:clamp(2rem,5vw,3.5rem);line-height:1.15;margin-top:10px;font-weight:900}
-    .hero p{margin-top:14px;color:#cbd5e1;font-size:1.05rem}
-    .cta{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
+    .hero{
+      position:relative;isolation:isolate;
+      padding:70px 0 40px;
+      background:
+        radial-gradient(900px 500px at 10% -10%,rgba(124,92,255,.33),transparent 65%),
+        radial-gradient(800px 480px at 80% -15%,rgba(74,168,255,.26),transparent 60%),
+        var(--grid),
+        radial-gradient(circle at 60% 120%,rgba(28,39,68,.8),transparent 55%),
+        linear-gradient(180deg,var(--bg),var(--bg-2));
+    }
+    .hero-inner{
+      display:grid;grid-template-columns:1.15fr .85fr;gap:46px;align-items:center;
+    }
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      color:var(--muted);font-weight:700;letter-spacing:.11em;
+      text-transform:uppercase;font-size:.8rem;
+      padding:4px 10px;border-radius:999px;
+      border:1px solid rgba(148,163,184,.5);
+      background:rgba(15,23,42,.75);
+    }
+    .eyebrow i{color:var(--primary-2)}
+    .hero h1{
+      margin-top:14px;
+      font-size:clamp(2.1rem,4vw,3.2rem);
+      line-height:1.1;font-weight:900;
+    }
+    .hero h1 span.accent{
+      background:linear-gradient(90deg,var(--primary),var(--primary-2));
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+    .hero p{
+      margin-top:14px;
+      color:#cbd5e1;font-size:1.02rem;max-width:620px;
+    }
+    .kpi-row{
+      display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;
+      font-size:.86rem;
+    }
+    .kpi{
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(148,163,184,.5);
+      color:#cbd5e1;background:rgba(15,23,42,.85);
+      display:flex;align-items:center;gap:6px;
+    }
+    .kpi span.value{font-weight:700;color:var(--success)}
+    .cta-row{
+      margin-top:22px;display:flex;flex-wrap:wrap;gap:10px;
+    }
 
-    /* Hero cards */
-    .cards{position:relative;display:grid;gap:14px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));border:1px solid var(--border);backdrop-filter:blur(10px);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-soft);animation:float 6s ease-in-out infinite}
-    .card:nth-child(2){animation-delay:-2s}
-    .card:nth-child(3){animation-delay:-4s}
-    .card i{font-size:1.2rem;color:var(--primary-2)}
-    .card h3{margin-top:6px;font-size:1.05rem}
-    .card p{margin-top:6px;color:var(--muted);font-size:.95rem}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    /* Hero right: Line status */
+    .hero-panel{
+      background:radial-gradient(circle at 0 0,rgba(124,92,255,.35),transparent 55%),
+                 linear-gradient(180deg,rgba(7,10,24,.96),rgba(7,10,24,.98));
+      border-radius:26px;
+      border:1px solid rgba(37,51,94,.8);
+      box-shadow:var(--shadow);
+      padding:18px 18px 20px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-panel::before{
+      content:"";position:absolute;inset:0;
+      background:radial-gradient(circle at 120% -10%,rgba(74,168,255,.2),transparent 55%);
+      opacity:.9;pointer-events:none;
+    }
+    .hero-panel-inner{position:relative;z-index:1}
+    .panel-header{
+      display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;
+      font-size:.82rem;color:#9ca3af;
+    }
+    .panel-header strong{font-size:.9rem;color:#e5e7eb}
+    .line-state{
+      display:flex;align-items:center;gap:8px;font-size:.82rem;
+      padding:5px 9px;border-radius:999px;
+      background:rgba(15,23,42,.9);border:1px solid rgba(37,99,235,.5);
+    }
+    .dot{
+      width:8px;height:8px;border-radius:999px;background:var(--success);
+      box-shadow:0 0 0 4px rgba(88,214,141,.3);
+    }
+    .line-metrics{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px;
+    }
+    .metric-card{
+      border-radius:14px;border:1px solid rgba(51,65,85,.9);
+      background:radial-gradient(circle at 0 0,rgba(148,163,253,.22),transparent 60%);
+      padding:9px 10px;
+      font-size:.82rem;
+    }
+    .metric-label{color:#9ca3af;font-size:.78rem}
+    .metric-value{font-size:1rem;font-weight:700}
+    .metric-trend{font-size:.75rem;margin-top:2px}
+    .metric-trend.up{color:var(--success)}
+    .metric-trend.down{color:var(--danger)}
+    .alarm-list{
+      margin-top:12px;border-radius:16px;
+      border:1px solid rgba(55,65,81,.9);
+      background:rgba(15,23,42,.96);padding:10px;
+      font-size:.8rem;
+    }
+    .alarm-header{display:flex;justify-content:space-between;margin-bottom:6px;color:#9ca3af}
+    .alarm-item{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:5px 0;border-top:1px dashed rgba(55,65,81,.7);
+    }
+    .alarm-item:first-of-type{border-top:none}
+    .alarm-tag{
+      font-size:.76rem;padding:2px 7px;border-radius:999px;
+      background:rgba(248,113,113,.15);color:#fecaca;border:1px solid rgba(248,113,113,.55);
+    }
+    .panel-footer{
+      margin-top:12px;display:flex;justify-content:space-between;align-items:center;
+      font-size:.78rem;color:#9ca3af;
+    }
+    .footer-pill{
+      padding:4px 9px;border-radius:999px;
+      background:rgba(15,23,42,.9);border:1px solid rgba(55,65,81,.9);
+      display:flex;align-items:center;gap:6px;
+    }
+    .footer-pill i{color:var(--primary-2)}
 
-    /* Section headings */
-    .section{padding:80px 0;border-top:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0))}
-    .section h2{font-size:clamp(1.6rem,3vw,2.2rem)}
-    .section .sub{color:var(--muted);margin-top:8px}
+    /* Sections shared */
+    .section{
+      padding:70px 0;border-top:1px solid var(--border);
+      background:radial-gradient(circle at 10% 0,rgba(148,163,253,.05),transparent 55%);
+    }
+    .section-header{max-width:640px}
+    .section h2{font-size:clamp(1.6rem,3vw,2.1rem)}
+    .section .sub{color:var(--muted);margin-top:8px;font-size:.98rem}
 
-    /* Features grid */
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin-top:32px}
-    .feature{grid-column:span 4;min-height:170px;background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));border:1px solid var(--border);border-radius:var(--radius);padding:18px;transition:.25s ease;position:relative;opacity:1}
+    /* Problem cards */
+    .problem-grid{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:18px;margin-top:26px;
+    }
+    .problem-card{
+      border-radius:var(--radius);border:1px solid var(--border);
+      padding:16px 16px 18px;
+      background:linear-gradient(180deg,rgba(15,23,42,.96),rgba(15,23,42,.98));
+      box-shadow:var(--shadow-soft);
+      font-size:.95rem;
+    }
+    .problem-card i{color:#facc15;margin-bottom:6px}
+    .problem-card h3{font-size:1rem;margin-bottom:6px}
+    .problem-card p{color:var(--muted);font-size:.9rem}
+
+    /* Solution strip */
+    .solution-strip{
+      margin-top:30px;border-radius:20px;
+      background:radial-gradient(circle at 10% 0,rgba(129,140,248,.35),transparent 65%);
+      border:1px solid rgba(79,70,229,.7);
+      padding:18px 16px;
+      display:grid;grid-template-columns:1.2fr 1fr;gap:24px;
+      align-items:center;
+    }
+    .solution-main p{color:#e5e7eb;font-size:.96rem}
+    .solution-main ul{margin-top:10px;display:grid;gap:6px;font-size:.9rem;color:#e5e7eb}
+    .solution-main li i{color:#a5b4fc;margin-right:6px}
+    .solution-steps{
+      display:flex;flex-wrap:wrap;gap:10px;font-size:.85rem;
+    }
+    .step-pill{
+      flex:1 1 110px;
+      border-radius:999px;padding:7px 11px;
+      border:1px solid rgba(165,180,252,.9);
+      background:rgba(15,23,42,.92);
+      display:flex;align-items:center;gap:6px;
+      color:#e5e7eb;
+    }
+    .step-pill span.step-index{
+      width:18px;height:18px;border-radius:999px;
+      background:rgba(79,70,229,1);display:flex;align-items:center;justify-content:center;
+      font-size:.7rem;font-weight:700;
+    }
+
+    /* Capabilities grid */
+    .grid{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:18px;margin-top:28px;
+    }
+    .feature{
+      min-height:170px;background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(15,23,42,.96));
+      border:1px solid var(--border);border-radius:var(--radius);padding:16px;
+      transition:.25s ease transform,.25s ease box-shadow;
+      position:relative;overflow:hidden;font-size:.94rem;
+    }
+    .feature::before{
+      content:"";position:absolute;inset:0;
+      background:radial-gradient(circle at 0 0,rgba(124,92,255,.22),transparent 55%);
+      opacity:.85;pointer-events:none;
+    }
+    .feature-inner{position:relative;z-index:1}
+    .feature i{color:var(--primary-2)}
+    .feature h3{margin-top:7px;font-size:1.02rem}
+    .feature p{margin-top:7px;color:var(--muted);font-size:.9rem}
+    .feature small{display:block;margin-top:6px;color:#e5e7eb;font-size:.8rem;opacity:.9}
     .feature:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-    .feature i{color:var(--primary);font-size:1.15rem}
-    .feature h3{margin-top:10px;font-size:1.1rem}
-    .feature p{margin-top:8px;color:var(--muted)}
 
-    /* Modalities */
-    .modalities{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:28px}
-    .mod{border-radius:14px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1px dashed var(--border);background:linear-gradient(180deg, rgba(124,92,255,.08), rgba(74,168,255,.06));opacity:1;transition:all .2s ease}
-    .mod i{font-size:1.6rem;margin-bottom:8px}
-    .mod strong{margin-top:2px}
-    .mod small{display:block;margin-top:6px;font-size:0.88rem;color:#cbd5e1;opacity:.9}
-    .mod:hover{box-shadow:0 12px 30px rgba(0,0,0,.28);transform:translateY(-2px)}
+    /* Scenario */
+    .scenario-wrap{
+      display:grid;grid-template-columns:1.1fr .9fr;gap:26px;margin-top:26px;align-items:flex-start;
+    }
+    .timeline{
+      border-radius:20px;border:1px solid var(--border);
+      background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(15,23,42,.96));
+      padding:16px 18px;font-size:.9rem;
+    }
+    .timeline h3{font-size:1rem;margin-bottom:8px}
+    .timeline-step{
+      display:grid;grid-template-columns:auto 1fr;gap:10px 12px;
+      padding:10px 0;border-top:1px dashed rgba(51,65,85,.9);
+    }
+    .timeline-step:first-of-type{border-top:none}
+    .timeline-step .badge{
+      width:24px;height:24px;border-radius:999px;
+      background:rgba(79,70,229,1);display:flex;align-items:center;justify-content:center;
+      font-size:.78rem;font-weight:700;
+    }
+    .timeline-step strong{font-size:.9rem}
+    .timeline-step p{color:var(--muted);font-size:.88rem}
+    .scenario-note{
+      margin-top:10px;font-size:.82rem;color:#9ca3af;
+    }
+    .scenario-kpis{
+      border-radius:20px;border:1px solid var(--border);
+      background:radial-gradient(circle at 0 0,rgba(52,211,153,.18),transparent 55%);
+      padding:16px;
+      font-size:.9rem;
+    }
+    .scenario-kpis h3{font-size:1rem;margin-bottom:8px}
+    .scenario-kpi-row{display:grid;gap:6px;margin-top:6px}
+    .scenario-kpi{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:6px 0;border-top:1px dashed rgba(55,65,81,.9);
+    }
+    .scenario-kpi:first-of-type{border-top:none}
+    .scenario-kpi span.label{color:#9ca3af}
+    .scenario-kpi span.val{font-weight:700}
 
-    /* Demo */
-    .demo-wrap{display:grid;gap:26px;align-items:start;grid-template-columns:1fr}
-    @media (min-width: 981px){.demo-wrap{ grid-template-columns:1fr 1fr; }}
-    .demo-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+    /* Architecture */
+    .arch-grid{
+      display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:24px;
+    }
+    .arch-card{
+      border-radius:18px;border:1px solid var(--border);
+      background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(15,23,42,.96));
+      padding:14px 13px;font-size:.88rem;position:relative;
+    }
+    .arch-card h3{font-size:.92rem;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+    .arch-card h3 i{color:var(--primary-2)}
+    .arch-card ul{list-style:none;margin-top:4px;display:grid;gap:3px;color:var(--muted)}
+    .arch-arrow{
+      position:absolute;right:-8px;top:50%;transform:translateY(-50%);
+      font-size:1.1rem;color:rgba(148,163,253,.7);
+    }
 
-    .demo-chat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;min-height:360px}
-    .chat-head{display:flex;align-items:center;gap:8px;color:#cbd5e1;border-bottom:1px solid #1e2a4a;padding-bottom:10px;margin-bottom:10px}
-    .msgs{display:grid;gap:10px;overflow:auto;flex:1;max-height:none;overscroll-behavior:contain;padding-right:4px;word-break:break-word;overflow-wrap:anywhere;margin-top:10px}
-    .m{max-width:90%;padding:10px 12px;border-radius:12px;font-size:.95rem}
-    .m.user{margin-left:auto;background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#0b0f1e}
-    .m.ai{background:#0f172a;border:1px solid #233258;color:#e2e8f0}
-
-    .chat-input{display:flex;gap:8px;margin-top:10px}
-    .chat-input input{flex:1;background:#0f172a;border:1px solid #233258;border-radius:999px;padding:10px 14px;color:#e2e8f0}
-    .chat-input button{border-radius:999px;padding:10px 16px}
-
-    /* Integrations strip */
-    .integrations{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px}
-    .pill{border:1px solid var(--border);border-radius:999px;padding:8px 12px;color:var(--muted);background:rgba(255,255,255,.02)}
+    /* Contact */
+    .contact-box{
+      margin-top:26px;border-radius:20px;border:1px solid var(--border);
+      background:linear-gradient(180deg,rgba(15,23,42,.98),rgba(15,23,42,.96));
+      padding:22px 18px;text-align:center;font-size:.96rem;
+    }
+    .contact-row{margin-bottom:8px}
+    .contact-row a{color:var(--primary-2);font-weight:600}
+    .contact-note{margin-top:10px;color:var(--muted);font-size:.86rem}
 
     /* Footer */
-    .footer{padding:40px 0;border-top:1px solid var(--border);color:var(--muted)}
+    .footer{
+      padding:30px 0;border-top:1px solid var(--border);color:var(--muted);font-size:.86rem;
+    }
 
-    /* Utilities */
-    .sr-only{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
-    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .badge{font-size:.8rem;border:1px solid var(--border);padding:6px 10px;border-radius:999px;color:#cbd5e1;background:rgba(255,255,255,.03)}
-
-    /* Animation classes */
-    .fade-in-element{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+    /* Animation */
+    .fade-in-element{opacity:0;transform:translateY(16px);transition:.6s ease opacity,.6s ease transform}
     .fade-in-element.visible{opacity:1;transform:translateY(0)}
 
-    /* Responsive tweaks */
+    /* Responsive */
     @media (max-width: 980px){
-      .hero .inner{grid-template-columns:1fr}
-      .grid .feature{grid-column:span 6}
-      .modalities{grid-template-columns:repeat(3,1fr)}
+      .hero-inner{grid-template-columns:1fr;gap:32px}
+      .hero-panel{max-width:480px;margin-inline:auto}
       .nav-links{display:none}
       .burger{display:inline-flex}
+      .problem-grid{grid-template-columns:1fr}
+      .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .scenario-wrap{grid-template-columns:1fr}
+      .arch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
     @media (max-width: 640px){
-      .grid .feature{grid-column:span 12}
-      .modalities{grid-template-columns:repeat(2,1fr)}
-      .m{max-width:100%}
-      .msgs{max-height:55vh}
-      .demo-chat{padding:16px}
+      .grid{grid-template-columns:1fr}
+      .arch-grid{grid-template-columns:1fr}
+      .solution-strip{grid-template-columns:1fr}
+      .hero{padding-top:58px}
     }
 
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce){
-      .card{animation:none}
-      .btn:hover{transform:none}
       .fade-in-element{transition:none}
-    }
-
-    /* Safe area for iOS */
-    @supports(padding:max(0px)){
-      body{ padding-bottom: max(0px, env(safe-area-inset-bottom)); }
+      .btn:hover,.feature:hover{transform:none;box-shadow:none}
     }
   </style>
 </head>
 <body>
   <header class="header" role="banner">
     <div class="container nav" aria-label="Ana gezinme" data-i18n-aria="nav_aria">
-      <a class="brand" href="#" aria-label="SAKAI ana sayfa" data-i18n-aria="brand_aria">
-        <span class="logo" aria-hidden="true"
-              style="background:none;box-shadow:none;width:180px;height:180px;display:flex;align-items:center;justify-content:center;padding:0">
-          <img src="logo3_no_background.png" alt="SAKAI Logo"
-               style="max-height:100%;max-width:100%;display:block;object-fit:contain" />
+      <a href="#home" class="brand" aria-label="Industrial SAKAI ana sayfa" data-i18n-aria="brand_aria">
+        <span class="logo">
+          <!-- Logonu burada tut, sadece dosya adını değiştirmen gerekebilir -->
+          <img src="logo3_no_background.png" alt="Industrial SAKAI Logo">
         </span>
       </a>
-
       <nav class="nav-links" aria-label="Birincil" data-i18n-aria="primary_nav">
-        <a href="#features" data-i18n="nav_features">Özellikler</a>
-        <a href="#modalities" data-i18n="nav_modalities">Veri Tipleri</a>
-        <a href="#demo" data-i18n="nav_demo">Demo</a>
+        <a href="#problem" data-i18n="nav_problem">Problem</a>
+        <a href="#solution" data-i18n="nav_solution">Çözüm</a>
+        <a href="#capabilities" data-i18n="nav_capabilities">Yetenekler</a>
+        <a href="#scenario" data-i18n="nav_scenario">Senaryo</a>
+        <a href="#architecture" data-i18n="nav_arch">Mimari</a>
         <a href="#contact" data-i18n="nav_contact">İletişim</a>
       </nav>
       <div class="nav-cta">
@@ -185,449 +421,767 @@
           <button id="btn-tr" class="active" aria-pressed="true">TR</button>
           <button id="btn-en" aria-pressed="false">EN</button>
         </div>
-        <a class="btn btn-primary" href="#contact"><i class="fa-regular fa-paper-plane"></i> <span data-i18n="cta_quote">Teklif Al</span></a>
-        <button class="burger" id="burger" aria-label="Menüyü aç/kapat" data-i18n-aria="burger_aria"><i class="fa-solid fa-bars"></i></button>
+        <a href="#contact" class="btn btn-primary">
+          <i class="fa-regular fa-paper-plane"></i>
+          <span data-i18n="cta_header">Hat keşif çağrısı planla</span>
+        </a>
+        <button class="burger" id="burger" aria-label="Menüyü aç/kapat" data-i18n-aria="burger_aria">
+          <i class="fa-solid fa-bars"></i>
+        </button>
       </div>
     </div>
   </header>
 
+  <!-- HERO -->
   <section class="hero" id="home">
-    <div class="container inner">
+    <div class="container hero-inner">
       <div>
-        <span class="eyebrow"><i class="fa-solid fa-shield-check"></i> <span data-i18n="eyebrow">Çoklu Veri Analitiği • Offline destek</span></span>
-        <h1 data-i18n="hero_title">Kurumsal verinizi <span style="background:linear-gradient(90deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent">tek platformda</span> anlayın ve hızla aksiyona dönüştürün.</h1>
-        <p data-i18n="hero_desc">SAKAI; metin, görsel, video, ses, sinyal ve tabloları bir araya getirir. RAG ve LLM destekli arayüz ile doğal dilde soru sorun, güvenli ve yerinde (on‑prem) çalıştırın.</p>
-        <div class="badges" aria-label="Öne çıkanlar" data-i18n-aria="badges_aria">
-          <span class="badge" data-i18n="badge_privacy"><i class="fa-solid fa-lock"></i> Veri sizde kalsın</span>
-          <span class="badge" data-i18n="badge_plug"><i class="fa-solid fa-diagram-project"></i> Plug & Play entegrasyon</span>
-          <span class="badge" data-i18n="badge_rt"><i class="fa-solid fa-gauge-high"></i> Gerçek zamanlı analiz</span>
+        <div class="eyebrow">
+          <i class="fa-solid fa-industry"></i>
+          <span data-i18n="eyebrow">Üretim Hattı Zekâ Katmanı • On-prem</span>
         </div>
-        <div class="cta">
-          <a href="#demo" class="btn btn-primary"><i class="fa-regular fa-circle-play"></i> <span data-i18n="cta_demo">Hızlı Demo</span></a>
-          <a href="#features" class="btn btn-ghost"><i class="fa-regular fa-compass"></i> <span data-i18n="cta_features">Özelliklere göz at</span></a>
+        <h1 data-i18n="hero_title">
+          Industrial SAKAI, <span class="accent">PLC ve sensör verisini</span> anlık içgörüye çevirerek duruşları öngörür ve kök nedenleri ortaya çıkarır.
+        </h1>
+        <p data-i18n="hero_desc">
+          PLC / SCADA, sensör, bakım kayıtları ve operatör notlarını tek bağlamda birleştiren LLM destekli platform. Üretim hattınız için kestirimli bakım, anomali tespiti ve kök neden analizi.
+        </p>
+        <div class="kpi-row">
+          <div class="kpi" data-i18n="hero_kpi1">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+            <span>OEE artışı: </span><span class="value">+%3-5</span>
+          </div>
+          <div class="kpi" data-i18n="hero_kpi2">
+            <i class="fa-solid fa-stopwatch"></i>
+            <span>Arıza tespit süresi: </span><span class="value">-%30</span>
+          </div>
+          <div class="kpi" data-i18n="hero_kpi3">
+            <i class="fa-solid fa-sack-dollar"></i>
+            <span>Beklenmeyen duruş maliyeti: </span><span class="value">-%10-15</span>
+          </div>
+        </div>
+        <div class="cta-row">
+          <a href="#scenario" class="btn btn-primary">
+            <i class="fa-regular fa-circle-play"></i>
+            <span data-i18n="cta_primary">Örnek Senaryoyu Gör</span>
+          </a>
+          <a href="#capabilities" class="btn btn-ghost">
+            <i class="fa-regular fa-compass"></i>
+            <span data-i18n="cta_secondary">Yeteneklere göz at</span>
+          </a>
         </div>
       </div>
-      <div class="cards" aria-hidden="true">
-        <div class="card">
-          <i class="fa-solid fa-layer-group"></i>
-          <h3 data-i18n="card_fusion_title">Çoklu Veri Füzyonu</h3>
-          <p data-i18n="card_fusion_desc">Metin+ses+görsel+video+sinyal birleşik inceleme ve bağlam koruma.</p>
+
+      <aside class="hero-panel fade-in-element" aria-hidden="false">
+        <div class="hero-panel-inner">
+          <div class="panel-header">
+            <div>
+              <strong data-i18n="panel_title">Hat 3 – Paketleme</strong>
+              <div style="font-size:.78rem;color:#9ca3af" data-i18n="panel_sub">
+                PLC: S7-1500 • 42 tag izleniyor
+              </div>
+            </div>
+            <div class="line-state">
+              <span class="dot"></span>
+              <span data-i18n="panel_state">Çalışıyor · AI izliyor</span>
+            </div>
+          </div>
+
+          <div class="line-metrics">
+            <div class="metric-card">
+              <div class="metric-label" data-i18n="panel_oee_label">OEE (son 24s)</div>
+              <div class="metric-value">87.4%</div>
+              <div class="metric-trend up" data-i18n="panel_oee_trend">+2.3 pts · AI önerisi uygulandı</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label" data-i18n="panel_mtbf_label">MTBF</div>
+              <div class="metric-value">46.2 sa</div>
+              <div class="metric-trend up" data-i18n="panel_mtbf_trend">+12.5% · planlı bakım</div>
+            </div>
+          </div>
+
+          <div class="alarm-list">
+            <div class="alarm-header">
+              <span data-i18n="panel_alarm_head">Canlı uyarılar</span>
+              <span style="font-size:.78rem;color:#6b7280">3</span>
+            </div>
+            <div class="alarm-item">
+              <div>
+                <div><strong>AI-ALM-023</strong> · <span data-i18n="panel_alarm1_title">Yüksek titreşim</span></div>
+                <div style="font-size:.78rem;color:#9ca3af" data-i18n="panel_alarm1_desc">
+                  Motor M3 · RMS titreşim 18 dk içinde eşik üstünde
+                </div>
+              </div>
+              <span class="alarm-tag" data-i18n="panel_alarm1_tag">Önleyici uyarı</span>
+            </div>
+            <div class="alarm-item">
+              <div>
+                <div><strong>SC-ALM-041</strong> · <span data-i18n="panel_alarm2_title">Plan dışı duruş riski</span></div>
+                <div style="font-size:.78rem;color:#9ca3af" data-i18n="panel_alarm2_desc">
+                  Geçmiş 12 duruşun %73’ü benzer pattern
+                </div>
+              </div>
+              <span class="alarm-tag" style="background:rgba(251,191,36,.16);border-color:rgba(251,191,36,.7);color:#fef3c7" data-i18n="panel_alarm2_tag">Risk</span>
+            </div>
+            <div class="alarm-item">
+              <div>
+                <div><strong>AI-RCA-007</strong> · <span data-i18n="panel_alarm3_title">Muhtemel kök neden</span></div>
+                <div style="font-size:.78rem;color:#9ca3af" data-i18n="panel_alarm3_desc">
+                  Ana neden: Konveyör bant gerginliği · %62 güven
+                </div>
+              </div>
+              <span class="alarm-tag" style="background:rgba(52,211,153,.18);border-color:rgba(52,211,153,.8);color:#bbf7d0" data-i18n="panel_alarm3_tag">RCA</span>
+            </div>
+          </div>
+
+          <div class="panel-footer">
+            <div class="footer-pill">
+              <i class="fa-solid fa-robot"></i>
+              <span data-i18n="panel_footer_left">LLM Co-pilot: Son duruş için aksiyon listesi hazır</span>
+            </div>
+            <div style="font-size:.78rem">
+              <span data-i18n="panel_footer_right">Son 30 günde 9 arıza erken yakalandı</span>
+            </div>
+          </div>
         </div>
-        <div class="card">
-          <i class="fa-solid fa-brain"></i>
-          <h3 data-i18n="card_rag_title">LLM + RAG</h3>
-          <p data-i18n="card_rag_desc">Kaynak dayanaklı cevaplar, alıntı ve dosya‑kısıtlama desteği.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="section" id="problem">
+    <div class="container">
+      <div class="section-header">
+        <h2 data-i18n="problem_title">Fabrika verisi dağınık; duruşların kök nedeni görünmez.</h2>
+        <p class="sub" data-i18n="problem_sub">
+          PLC/SCADA, historian, MES, bakım kayıtları ve operatör notları ayrı sistemlerde. Ekipler reaktif koşuyor; duruşlar tekrar ediyor, OEE hedefleri kaçıyor.
+        </p>
+      </div>
+
+      <div class="problem-grid">
+        <article class="problem-card fade-in-element">
+          <i class="fa-solid fa-database"></i>
+          <h3 data-i18n="problem1_title">Tag’ler, log’lar, formlar birbirini görmüyor</h3>
+          <p data-i18n="problem1_desc">
+            Farklı PLC markaları, historian verileri, MES ve Excel raporları aynı ekranı paylaşmıyor. Bir hat arızasında operatör, bakım ve proses mühendisi aynı resmi görmek için zaman kaybediyor.
+          </p>
+        </article>
+        <article class="problem-card fade-in-element">
+          <i class="fa-solid fa-fire-extinguisher"></i>
+          <h3 data-i18n="problem2_title">Reaktif bakım ve tekrar eden duruşlar</h3>
+          <p data-i18n="problem2_desc">
+            Alarm geldiğinde hat çoğunlukla zaten durmuş oluyor. Duruşlar tek tek kapatılıyor; root cause analizi yapılmadığı için aynı problem farklı günlerde tekrar ediyor.
+          </p>
+        </article>
+        <article class="problem-card fade-in-element">
+          <i class="fa-solid fa-user-clock"></i>
+          <h3 data-i18n="problem3_title">Uzman bağımlılığı ve bilgi kaybı</h3>
+          <p data-i18n="problem3_desc">
+            “O motor hep böyledir” diyen birkaç kilit kişi var. Vardiya değişimlerinde, yeni operatör geldiğinde veya saha dışı destek gerektiğinde bu sessiz bilgi kayboluyor.
+          </p>
+        </article>
+      </div>
+
+      <div class="solution-strip fade-in-element" id="solution">
+        <div class="solution-main">
+          <h3 data-i18n="solution_title">Industrial SAKAI: Üretim hattı için yapay zekâ katmanı</h3>
+          <p data-i18n="solution_desc">
+            Industrial SAKAI; PLC/SCADA, sensör, historian, bakım kayıtları ve operatör açıklamalarını tek bağlamda birleştirir. LLM tabanlı co-pilot, duruşu anlamanıza, kök nedeni görmenize ve tekrarı engellemenize yardım eder.
+          </p>
+          <ul>
+            <li data-i18n="solution_b1"><i class="fa-solid fa-check"></i> Hat bazlı dijital twin ve canlı performans panelleri</li>
+            <li data-i18n="solution_b2"><i class="fa-solid fa-check"></i> Anomali tespiti, kestirimli bakım ve RCA (root cause analysis)</li>
+            <li data-i18n="solution_b3"><i class="fa-solid fa-check"></i> On-prem kurulum, PLC/historian entegrasyonları ve yetki tabanlı erişim</li>
+          </ul>
         </div>
-        <div class="card">
-          <i class="fa-solid fa-user-shield"></i>
-          <h3 data-i18n="card_sec_title">Güvenlik</h3>
-          <p data-i18n="card_sec_desc">RBAC, denetim izi, offline/air‑gapped kurulum.</p>
+        <div class="solution-steps">
+          <div class="step-pill" data-i18n="solution_step1">
+            <span class="step-index">1</span> <span>Topla · PLC tag, alarm, sensör, bakım kaydı, operatör notu</span>
+          </div>
+          <div class="step-pill" data-i18n="solution_step2">
+            <span class="step-index">2</span> <span>Anla · Zaman senkronizasyonu, pattern ve korelasyon analizi</span>
+          </div>
+          <div class="step-pill" data-i18n="solution_step3">
+            <span class="step-index">3</span> <span>Öner · Duruş öncesi uyarı, aksiyon listesi ve kök neden haritası</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="features">
+  <!-- CAPABILITIES -->
+  <section class="section" id="capabilities">
     <div class="container">
-      <h2 data-i18n="features_title">Güçlü Özellikler</h2>
-      <p class="sub" data-i18n="features_sub">Verinizi operasyonel içgörüye dönüştüren SAKAI yetenekleri</p>
+      <div class="section-header">
+        <h2 data-i18n="cap_title">Üretim için tasarlanmış başlıca yetenekler</h2>
+        <p class="sub" data-i18n="cap_sub">
+          Hat bazlı performans, kestirimli bakım ve gerçek zamanlı uyarılar; tamamı PLC/SCADA ve bakım verilerinizle beslenen bir yapay zekâ katmanı.
+        </p>
+      </div>
 
       <div class="grid">
-        <article class="feature fade-in-element" aria-label="Çoklu veri füzyonu" data-i18n-aria="feature1_aria">
-          <i class="fa-solid fa-layer-group"></i>
-          <h3 data-i18n="feature1_title">Çoklu Veri Füzyonu</h3>
-          <p data-i18n="feature1_desc">Farklı kaynakları tek bağlamda birleştirip çapraz arama ve korelasyon yapın.</p>
+        <article class="feature fade-in-element">
+          <div class="feature-inner">
+            <i class="fa-solid fa-gauge-high"></i>
+            <h3 data-i18n="cap1_title">Gerçek zamanlı hat dijital twini</h3>
+            <p data-i18n="cap1_desc">
+              OEE, hız, atık, mikro duruşlar ve enerji tüketimini tek ekranda görün. PLC tag’leri ve historian verileri otomatik eşleştirilir.
+            </p>
+            <small data-i18n="cap1_small">Seri üretim hatları, paketleme, dolum, montaj hücreleri</small>
+          </div>
         </article>
-        <article class="feature fade-in-element" aria-label="Doğal dil sorgulama" data-i18n-aria="feature2_aria">
-          <i class="fa-solid fa-comments"></i>
-          <h3 data-i18n="feature2_title">Doğal Dil Sorgulama</h3>
-          <p data-i18n="feature2_desc">Chat arayüzünde Türkçe dahil 100+ dil desteği ile anında cevap alın.</p>
-        </article>
-        <article class="feature fade-in-element" aria-label="Görsel ve video analiz" data-i18n-aria="feature3_aria">
-          <i class="fa-solid fa-image"></i>
-          <h3 data-i18n="feature3_title">Görsel & Video Analizi</h3>
-          <p data-i18n="feature3_desc">Nesne tanıma, sahne/olay segmentasyonu.</p>
-        </article>
-        <article class="feature fade-in-element" aria-label="Ses ve çağrı analitiği" data-i18n-aria="feature4_aria">
-          <i class="fa-solid fa-microphone-lines"></i>
-          <h3 data-i18n="feature4_title">Ses & Çağrı Analitiği</h3>
-          <p data-i18n="feature4_desc">STT, konuşmacı ayrımı, duygu/niyet analizi, kalite metrikleri.</p>
-        </article>
-        <article class="feature fade-in-element" aria-label="Tablo ve veri ambarı" data-i18n-aria="feature5_aria">
-          <i class="fa-solid fa-table"></i>
-          <h3 data-i18n="feature5_title">Tablo & BI Köprüsü</h3>
-          <p data-i18n="feature5_desc">SQL/CSV/Parquet içe aktarım, metrik kartları ve dashboard köprüsü.</p>
-        </article>
-        <article class="feature fade-in-element" aria-label="Güvenlik ve denetim" data-i18n-aria="feature6_aria">
-          <i class="fa-solid fa-shield-halved"></i>
-          <h3 data-i18n="feature6_title">Güvenlik</h3>
-          <p data-i18n="feature6_desc">RBAC, SSO, denetim günlüğü ve hassas veri maskeleme.</p>
-        </article>
-      </div>
 
-      <div class="integrations" aria-label="Entegrasyonlar" data-i18n-aria="integrations_aria">
-        <span class="pill"> <i class="fa-brands fa-aws"></i> <span data-i18n="int_aws">S3 / MinIO</span></span>
-        <span class="pill"> <i class="fa-solid fa-database"></i> <span data-i18n="int_pg">PostgreSQL / pgvector</span></span>
-        <span class="pill"> <i class="fa-brands fa-docker"></i> <span data-i18n="int_docker">Docker / K8s</span></span>
-        <span class="pill"> <i class="fa-solid fa-brain"></i> <span data-i18n="int_rag">RAG</span></span>
-        <span class="pill"> <i class="fa-solid fa-robot"></i> <span data-i18n="int_llm">LLM</span></span>
-        <span class="pill"> <i class="fa-solid fa-volume-high"></i> <span data-i18n="int_tts">TTS</span></span>
-        <span class="pill"> <i class="fa-brands fa-python"></i> <span data-i18n="int_torch">PyTorch</span></span>
-        <span class="pill"> <i class="fa-solid fa-stream"></i> <span data-i18n="int_kafka">Kafka</span></span>
-        <span class="pill"> <i class="fa-brands fa-python"></i> <span data-i18n="int_sdk">Python SDK</span></span>
+        <article class="feature fade-in-element">
+          <div class="feature-inner">
+            <i class="fa-solid fa-wave-square"></i>
+            <h3 data-i18n="cap2_title">Anomali tespiti & kestirimli bakım</h3>
+            <p data-i18n="cap2_desc">
+              Titreşim, akım, sıcaklık ve hız sinyallerinde öğrenilmiş normalden sapmaları yakalar. Duruş gerçekleşmeden önce bakım ekibini uyarır.
+            </p>
+            <small data-i18n="cap2_small">MTBF, MTTR ve planlı bakım uyumu iyileşir</small>
+          </div>
+        </article>
+
+        <article class="feature fade-in-element">
+          <div class="feature-inner">
+            <i class="fa-solid fa-diagram-project"></i>
+            <h3 data-i18n="cap3_title">Kök neden analizi (RCA) haritaları</h3>
+            <p data-i18n="cap3_desc">
+              Geçmiş duruşlar, alarmlar ve bakım notlarını veri odaklı bir RCA grafiğine çevirir; “en olası neden” ve “destekleyici sinyaller”i gösterir.
+            </p>
+            <small data-i18n="cap3_small">LLM destekli açıklamalar ve aksiyon önerileri</small>
+          </div>
+        </article>
+
+        <article class="feature fade-in-element">
+          <div class="feature-inner">
+            <i class="fa-solid fa-user-helmet-safety"></i>
+            <h3 data-i18n="cap4_title">Operatör ve bakım co-pilot</h3>
+            <p data-i18n="cap4_desc">
+              Operatör; doğal dilde “Bu alarm neden tekrar ediyor?” diye sorduğunda, sistem PLC trendleri, geçmiş arızalar ve bakım log’larından yanıt üretir.
+            </p>
+            <small data-i18n="cap4_small">Vardiya değişimlerinde bilgi kaybını azaltır</small>
+          </div>
+        </article>
+
+        <article class="feature fade-in-element">
+          <div class="feature-inner">
+            <i class="fa-solid fa-lock"></i>
+            <h3 data-i18n="cap5_title">On-prem, güvenlik ve yetki</h3>
+            <p data-i18n="cap5_desc">
+              Tamamen kurum içinde (on-prem veya edge) çalışır. RBAC, SSO, denetim logları ve veri maskeleme ile üretim veriniz sahadan dışarı çıkmaz.
+            </p>
+            <small data-i18n="cap5_small">IT ve OT güvenlik politikalarına uyumlu</small>
+          </div>
+        </article>
+
+        <article class="feature fade-in-element">
+          <div class="feature-inner">
+            <i class="fa-solid fa-plug-circle-bolt"></i>
+            <h3 data-i18n="cap6_title">PLC & historian entegrasyonları</h3>
+            <p data-i18n="cap6_desc">
+              Siemens, Allen-Bradley vb. PLC’ler, OPC UA/DA, Modbus, MQTT, historian ve MES sistemleri ile entegre olur; veri modeli tekilleştirilir.
+            </p>
+            <small data-i18n="cap6_small">Mevcut altyapıya ek katman olarak konumlanır</small>
+          </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <section class="section" id="modalities">
+  <!-- SCENARIO -->
+  <section class="section" id="scenario">
     <div class="container">
-      <h2 data-i18n="mods_title">Desteklenen Veri Tipleri</h2>
-      <p class="sub" data-i18n="mods_sub">Tek platform, farklı veri akışları</p>
-      <div class="modalities">
-        <div class="mod fade-in-element">
-          <i class="fa-regular fa-file-lines"></i>
-          <strong data-i18n="mod_text">Metin</strong>
-          <small data-i18n="mod_text_desc">PDF, Word, HTML, e‑posta, Markdown</small>
+      <div class="section-header">
+        <h2 data-i18n="scenario_title">Örnek senaryo: Paketleme hattında tekrar eden duruş</h2>
+        <p class="sub" data-i18n="scenario_sub">
+          Hat 3 paketleme hattında, son üç hafta içinde 11 kez tekrar eden “etiketleme ünitesi arızası” var. Industrial SAKAI bu durumu nasıl ele alır?
+        </p>
+      </div>
+
+      <div class="scenario-wrap">
+        <div class="timeline">
+          <h3 data-i18n="scenario_flow_title">Adım adım akış</h3>
+
+          <div class="timeline-step">
+            <div class="badge">1</div>
+            <div>
+              <strong data-i18n="scenario_step1_title">Veri akışı</strong>
+              <p data-i18n="scenario_step1_desc">
+                PLC’den hız, tork, sıcaklık, alarm ve I/O durum sinyalleri; historian trendleri, bakım talimatları ve operatör açıklamaları Industrial SAKAI’ye akıyor.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="badge">2</div>
+            <div>
+              <strong data-i18n="scenario_step2_title">Anomali yakalama</strong>
+              <p data-i18n="scenario_step2_desc">
+                Model, hat durmadan önceki 20 dakikada motor akımındaki pattern ve etiket sensöründeki mikro kesintileri “tekrar eden anomali” olarak işaretliyor.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="badge">3</div>
+            <div>
+              <strong data-i18n="scenario_step3_title">RCA ve öneri</strong>
+              <p data-i18n="scenario_step3_desc">
+                LLM tabanlı co-pilot; geçmiş 11 duruşu, bakım notlarını ve trendleri tarayıp “konveyör bant gerginliği ve rulman ömrü”nü en olası kök neden olarak sunuyor; kontrol listesi öneriyor.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="badge">4</div>
+            <div>
+              <strong data-i18n="scenario_step4_title">Proaktif aksiyon</strong>
+              <p data-i18n="scenario_step4_desc">
+                Bakım ekibi, duruş planlanmadan önce ilgili vardiyada kontrolü yapıyor. Sistem; aksiyon alındıktan sonraki ilk 30 günde benzer pattern’i takip ederek iyileşmeyi doğruluyor.
+              </p>
+            </div>
+          </div>
+
+          <p class="scenario-note" data-i18n="scenario_note">
+            Operatör, “Bu alarm tekrar ederse önce neyi kontrol etmeliyim?” diye sorduğunda, Industrial SAKAI aynı RCA bilgisini doğal dilde, adım adım anlatır.
+          </p>
         </div>
-        <div class="mod fade-in-element">
-          <i class="fa-regular fa-image"></i>
-          <strong data-i18n="mod_image">Görsel</strong>
-          <small data-i18n="mod_image_desc">OCR, EXIF çıkarımı</small>
-        </div>
-        <div class="mod fade-in-element">
-          <i class="fa-solid fa-video"></i>
-          <strong data-i18n="mod_video">Video</strong>
-          <small data-i18n="mod_video_desc">Nesne tespiti, sahne/olay analizi, konuşma çıkarımı</small>
-        </div>
-        <div class="mod fade-in-element">
-          <i class="fa-solid fa-microphone"></i>
-          <strong data-i18n="mod_audio">Ses</strong>
-          <small data-i18n="mod_audio_desc">STT, konuşmacı ayrımı (diarization), duygu/niyet</small>
-        </div>
-        <div class="mod fade-in-element">
-          <i class="fa-solid fa-satellite-dish"></i>
-          <strong data-i18n="mod_signal">Sinyal</strong>
-          <small data-i18n="mod_signal_desc">RF/IoT/telm. spektrum analizi, anomali tespiti</small>
-        </div>
-        <div class="mod fade-in-element">
-          <i class="fa-solid fa-table"></i>
-          <strong data-i18n="mod_table">Tablo</strong>
-          <small data-i18n="mod_table_desc">CSV, Excel, SQL sonuçları, metrik panelleri</small>
-        </div>
+
+        <aside class="scenario-kpis fade-in-element">
+          <h3 data-i18n="scenario_kpi_title">Ölçülebilir etki</h3>
+          <div class="scenario-kpi-row">
+            <div class="scenario-kpi">
+              <span class="label" data-i18n="scenario_kpi1_label">Paketleme hattı duruş süresi</span>
+              <span class="val" data-i18n="scenario_kpi1_val">-%27</span>
+            </div>
+            <div class="scenario-kpi">
+              <span class="label" data-i18n="scenario_kpi2_label">Tekrar eden arıza sayısı</span>
+              <span class="val" data-i18n="scenario_kpi2_val">11 → 3</span>
+            </div>
+            <div class="scenario-kpi">
+              <span class="label" data-i18n="scenario_kpi3_label">Arıza teşhis süresi</span>
+              <span class="val" data-i18n="scenario_kpi3_val">-%35</span>
+            </div>
+            <div class="scenario-kpi">
+              <span class="label" data-i18n="scenario_kpi4_label">Operatör soru sayısı</span>
+              <span class="val" data-i18n="scenario_kpi4_val">LLM co-pilot ile daha hızlı yanıt</span>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   </section>
 
-  <section class="section" id="demo">
+  <!-- ARCHITECTURE -->
+  <section class="section" id="architecture">
     <div class="container">
-      <h2 data-i18n="demo_title">Hızlı Demo</h2>
-      <p class="sub" data-i18n="demo_sub">RAG destekli SAKAI sohbet arayüzünden örnek etkileşim</p>
+      <div class="section-header">
+        <h2 data-i18n="arch_title">Endüstriyel ortama uygun mimari</h2>
+        <p class="sub" data-i18n="arch_sub">
+          Industrial SAKAI, mevcut PLC/SCADA ve historian mimarinize eklenen ince bir zekâ katmanı olarak konumlanır; mevcut OT altyapınızı değiştirmez.
+        </p>
+      </div>
 
-      <div class="demo-wrap">
-        <div class="demo-chat">
-          <div class="chat-head"><i class="fa-regular fa-comments"></i> <span data-i18n="chat_head">Örnek Sohbet</span></div>
-          <div class="msgs" aria-live="polite">
-            <div class="m ai" data-i18n="chat_ai_1">
-              Merhaba! “Q2_2025_GelirTablosu.xlsx” ve “Earnings_Call_2025Q2.pdf” dosyalarıyla çalışıyorum. İlk sorunuz nedir?
-            </div>
+      <div class="arch-grid">
+        <div class="arch-card fade-in-element">
+          <h3><i class="fa-solid fa-satellite-dish"></i> <span data-i18n="arch1_title">Edge Collector</span></h3>
+          <ul>
+            <li data-i18n="arch1_1">OPC UA/DA, Modbus, MQTT, REST</li>
+            <li data-i18n="arch1_2">PLC ve sensörlerden veri akışı</li>
+            <li data-i18n="arch1_3">Yerel ön işleme ve buffering</li>
+          </ul>
+          <div class="arch-arrow"><i class="fa-solid fa-angles-right"></i></div>
+        </div>
 
-            <div class="m user" data-i18n="chat_user_1">
-              Q2 net satış ve brüt marj kaç?
-            </div>
-            <div class="m ai" data-i18n="chat_ai_2">
-              Net satış: <strong>₺1.24B</strong> · Brüt marj: <strong>%36.8</strong>.<br>
-              <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “GelirTablosu”!B12,C18</em>
-            </div>
+        <div class="arch-card fade-in-element">
+          <h3><i class="fa-solid fa-database"></i> <span data-i18n="arch2_title">Zaman serisi & feature store</span></h3>
+          <ul>
+            <li data-i18n="arch2_1">Zaman senkronizasyonu ve etiketleme</li>
+            <li data-i18n="arch2_2">Duruş, alarm ve bakım kayıtlarının birleşimi</li>
+            <li data-i18n="arch2_3">Hat/ekipman bazlı veri modeli</li>
+          </ul>
+          <div class="arch-arrow"><i class="fa-solid fa-angles-right"></i></div>
+        </div>
 
-            <div class="m user" data-i18n="chat_user_2">
-              Net kâr marjı ve EBITDA nedir?
-            </div>
-            <div class="m ai" data-i18n="chat_ai_3">
-              Net kâr marjı: <strong>%15.1</strong> · EBITDA: <strong>₺238M</strong>.<br>
-              <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Özet”!D6,D9</em>
-            </div>
+        <div class="arch-card fade-in-element">
+          <h3><i class="fa-solid fa-brain"></i> <span data-i18n="arch3_title">ML & LLM Motoru</span></h3>
+          <ul>
+            <li data-i18n="arch3_1">Anomali tespiti ve öngörü modelleri</li>
+            <li data-i18n="arch3_2">RCA graf yapıları ve pattern madenciliği</li>
+            <li data-i18n="arch3_3">LLM tabanlı doğal dil co-pilot</li>
+          </ul>
+          <div class="arch-arrow"><i class="fa-solid fa-angles-right"></i></div>
+        </div>
 
-            <div class="m user" data-i18n="chat_user_3">
-              Operasyonel giderlerin % değişimi?
-            </div>
-            <div class="m ai" data-i18n="chat_ai_4">
-              Q/Q bazda <strong>%+6.3</strong> artış (özellikle S&M kalemi).<br>
-              <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Giderler”!B7:D12</em>
-            </div>
-
-            <div class="m user" data-i18n="chat_user_4">
-              Kur etkisi (FX) net kâra katkı?
-            </div>
-            <div class="m ai" data-i18n="chat_ai_5">
-              FX net etkisi: <strong>₺+18.6M</strong> (elde edilen kur farkı gelirleri).<br>
-              <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Diğer Gelir/Gider”!C5</em>
-            </div>
-
-            <div class="m user" data-i18n="chat_user_5">
-              Q3 için brüt marj rehberi?
-            </div>
-            <div class="m ai" data-i18n="chat_ai_6">
-              CFO rehberi: <strong>+80‑120 bps</strong> iyileşme beklentisi.<br>
-              <em>Kaynak: Earnings_Call_2025Q2.pdf → s.3 (Soru‑Cevap)</em>
-            </div>
-
-            <div class="m user" data-i18n="chat_user_6">
-              Serbest nakit akımı (FCF) ve borç/özkaynak oranı?
-            </div>
-            <div class="m ai" data-i18n="chat_ai_7">
-              FCF: <strong>₺126M</strong> · Borç/Özkaynak: <strong>0.42x</strong>.<br>
-              <em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Nakit Akımı”!E14; “Bilanço”!C22,C34</em>
-            </div>
-          </div>
-          </div>
-        <div class="demo-box">
-          <h3 style="margin-bottom:8px" data-i18n="why_title">Neden SAKAI?</h3>
-          <ul style="color:var(--muted);display:grid;gap:10px">
-            <li data-i18n="why_1"><i class="fa-solid fa-check"></i> Dosya-kısıtlı cevap ve kaynak alıntısı ile <strong>halüsinasyon azaltma</strong>.</li>
-            <li data-i18n="why_2"><i class="fa-solid fa-check"></i> <strong>On-prem / offline</strong> kurulum; veriniz kurum dışına çıkmaz.</li>
-            <li data-i18n="why_3"><i class="fa-solid fa-check"></i> <strong>Rol bazlı erişim</strong> ve kullanıcıya özel paneller.</li>
-            <li data-i18n="why_4"><i class="fa-solid fa-check"></i> <strong>Plug & Play</strong> entegrasyon: Kafka, Elastic, PostgreSQL…</li>
-            <li data-i18n="why_5"><i class="fa-solid fa-check"></i> <strong>Çoklu veri türü analizi</strong>: metin, görsel, ses, video, sinyal, tablo.</li>
-            <li data-i18n="why_6"><i class="fa-solid fa-check"></i> <strong>Gerçek zamanlı sorgu yanıtı</strong> ve büyük veri desteği.</li>
-            <li data-i18n="why_7"><i class="fa-solid fa-check"></i> <strong>Kuruma özel LLM eğitimi</strong> ile daha doğru ve bağlama uygun yanıtlar.</li>
-            <li data-i18n="why_8"><i class="fa-solid fa-check"></i> <strong>Endüstri standartlarında güvenlik</strong>: şifreleme, loglama, erişim kontrolü.</li>
-            <li data-i18n="why_9"><i class="fa-solid fa-check"></i> <strong>Modüler mimari</strong> ile ihtiyaca göre özelleştirilebilir yapı.</li>
+        <div class="arch-card fade-in-element">
+          <h3><i class="fa-solid fa-display"></i> <span data-i18n="arch4_title">Kullanıcı arayüzü & entegrasyon</span></h3>
+          <ul>
+            <li data-i18n="arch4_1">Hat panelleri, RCA ekranları ve alarm görünümleri</li>
+            <li data-i18n="arch4_2">Bakım & MES sistemleri ile entegrasyon</li>
+            <li data-i18n="arch4_3">REST / gRPC API ve webhook’lar</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- CONTACT -->
   <section class="section" id="contact">
     <div class="container">
-      <h2 data-i18n="contact_title">İletişime Geç</h2>
-      <p class="sub" data-i18n="contact_sub">Kurumunuz için canlı demo ve fiyatlandırma bilgisi almak için bizimle iletişime geçin</p>
-
-      <div class="feature" style="grid-column:span 12; text-align:center; padding:24px; margin-top:24px">
-        <p style="margin-bottom:12px; font-size:1.05rem; color:var(--text)">
-          <i class="fa-regular fa-envelope"></i>
-          <strong data-i18n="email_label">E-posta:</strong> <a href="mailto:berkanttugberk@gmail.com" style="color:var(--primary-2)">berkanttugberk@gmail.com</a>
+      <div class="section-header">
+        <h2 data-i18n="contact_title">İlk pilot hattınızı birlikte seçelim</h2>
+        <p class="sub" data-i18n="contact_sub">
+          30-60 dakikalık bir keşif görüşmesinde üretim hattınızı dinliyor, veri kaynaklarınızı haritalıyor ve Industrial SAKAI için en uygun pilot senaryoyu birlikte tasarlıyoruz.
         </p>
-        <p style="margin-bottom:12px; font-size:1.05rem; color:var(--text)">
-          <i class="fa-regular fa-envelope"></i>
-          <strong data-i18n="email_label">E-posta:</strong> <a href="mailto:turgutmetekagan@gmail.com" style="color:var(--primary-2)">turgutmetekagan@gmail.com</a>
-        </p>
+      </div>
 
-        <a href="mailto:berkanttugberk@gmail.com" class="btn btn-primary">
-          <i class="fa-regular fa-paper-plane"></i> <span data-i18n="contact_cta">Mail Gönder</span>
+      <div class="contact-box">
+        <p class="contact-row">
+          <i class="fa-regular fa-envelope"></i>
+          <strong data-i18n="email_label">E-posta:</strong>
+          <a href="mailto:berkanttugberk@gmail.com">berkanttugberk@gmail.com</a>
+        </p>
+        <p class="contact-row">
+          <i class="fa-regular fa-envelope"></i>
+          <strong data-i18n="email_label">E-posta:</strong>
+          <a href="mailto:turgutmetekagan@gmail.com">turgutmetekagan@gmail.com</a>
+        </p>
+        <a href="mailto:berkanttugberk@gmail.com" class="btn btn-primary" style="margin-top:8px">
+          <i class="fa-regular fa-paper-plane"></i>
+          <span data-i18n="contact_cta">Pilot hat için bize yaz</span>
         </a>
+        <p class="contact-note" data-i18n="contact_note">
+          Türkiye’deki erken dönem pilot projeler için sınırlı kontenjanda özel koşullar sunuyoruz.
+        </p>
       </div>
     </div>
   </section>
 
   <footer class="footer">
-    <div class="container" style="display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap">
-      <div><span data-i18n="copyright">©</span> <span id="y"></span> SAKAI • <span data-i18n="rights">Tüm hakları saklıdır.</span></div>
-      <div style="display:flex;gap:14px">
-        <a href="#" aria-label="Gizlilik" data-i18n="footer_privacy">Gizlilik</a>
-        <a href="#" aria-label="KVKK" data-i18n="footer_kvkk">KVKK</a>
-        <a href="#" aria-label="Kullanım Şartları" data-i18n="footer_terms">Kullanım Şartları</a>
+    <div class="container" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div>
+        <span id="y"></span> Industrial SAKAI • <span data-i18n="rights">Tüm hakları saklıdır.</span>
+      </div>
+      <div style="display:flex;gap:10px">
+        <a href="#" data-i18n="footer_privacy">Gizlilik</a>
+        <a href="#" data-i18n="footer_kvkk">KVKK</a>
+        <a href="#" data-i18n="footer_terms">Kullanım Şartları</a>
       </div>
     </div>
   </footer>
 
   <script>
     // Year
-    document.getElementById('y').textContent = new Date().getFullYear();
+    document.getElementById('y').textContent = "© " + new Date().getFullYear();
 
-    // Simple mobile menu
+    // Burger
     const burger = document.getElementById('burger');
     burger?.addEventListener('click', () => {
       const links = document.querySelector('.nav-links');
-      if(!links) return;
+      if (!links) return;
       const shown = getComputedStyle(links).display !== 'none';
       links.style.display = shown ? 'none' : 'flex';
       links.style.flexDirection = 'column';
-      links.style.gap = '14px';
       links.style.position = 'absolute';
-      links.style.top = '64px';
+      links.style.top = '56px';
       links.style.right = '16px';
-      links.style.background = 'rgba(13,18,40,.98)';
+      links.style.background = 'rgba(5,8,20,.98)';
       links.style.border = '1px solid var(--border)';
       links.style.borderRadius = '12px';
-      links.style.padding = '12px 16px';
+      links.style.padding = '10px 14px';
+      links.style.gap = '10px';
       links.style.boxShadow = 'var(--shadow)';
+      links.style.zIndex = '60';
     });
 
-    // Intersection Observer for animations
-    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
-    const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } }); }, observerOptions);
-    document.querySelectorAll('.fade-in-element').forEach(el => { observer.observe(el); });
-    setTimeout(() => { document.querySelectorAll('.fade-in-element:not(.visible)').forEach(el => { el.classList.add('visible'); }); }, 1000);
+    // Intersection Observer
+    const observerOptions = { threshold: 0.15, rootMargin: '0px 0px -40px 0px' };
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible');});
+    }, observerOptions);
+    document.querySelectorAll('.fade-in-element').forEach(el => io.observe(el));
+    setTimeout(() => {
+      document.querySelectorAll('.fade-in-element:not(.visible)').forEach(el => el.classList.add('visible'));
+    }, 900);
 
-    // ======== I18N ========
+    // I18N
     const i18n = {
-      tr: {
-        meta_title: 'SAKAI – Çoklu Veri Analiz Platformu',
-        meta_desc: 'SAKAI: metin, görsel, video, ses, sinyal ve tablo verilerini tek platformda birleştiren yapay zekâ destekli veri analiz yazılımı.',
-        nav_aria: 'Ana gezinme',
-        brand_aria: 'SAKAI ana sayfa',
-        primary_nav: 'Birincil',
-        burger_aria: 'Menüyü aç/kapat',
-        lang_switch: 'Dil seçici',
-        nav_features: 'Özellikler', nav_modalities: 'Veri Tipleri', nav_demo: 'Demo', nav_contact: 'İletişim',
-        eyebrow: 'Çoklu Veri Analitiği • Offline destek',
-        hero_title: 'Kurumsal verinizi <span style="background:linear-gradient(90deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent">tek platformda</span> anlayın ve hızla aksiyona dönüştürün.',
-        hero_desc: 'SAKAI; metin, görsel, video, ses, sinyal ve tabloları bir araya getirir. RAG ve LLM destekli arayüz ile doğal dilde soru sorun, güvenli ve yerinde (on‑prem) çalıştırın.',
-        badge_privacy: '<i class="fa-solid fa-lock"></i> Veri sizde kalsın',
-        badge_plug: '<i class="fa-solid fa-diagram-project"></i> Plug & Play entegrasyon',
-        badge_rt: '<i class="fa-solid fa-gauge-high"></i> Gerçek zamanlı analiz',
-        cta_demo: 'Hızlı Demo', cta_features: 'Özelliklere göz at', cta_quote: 'Teklif Al',
-        card_fusion_title: 'Çoklu Veri Füzyonu', card_fusion_desc: 'Metin+ses+görsel+video+sinyal birleşik inceleme ve bağlam koruma.',
-        card_rag_title: 'LLM + RAG', card_rag_desc: 'Kaynak dayanaklı cevaplar, alıntı ve dosya‑kısıtlama desteği.',
-        card_sec_title: 'Güvenlik', card_sec_desc: 'RBAC, denetim izi, offline/air‑gapped kurulum.',
-        features_title: 'Güçlü Özellikler', features_sub: 'Verinizi operasyonel içgörüye dönüştüren SAKAI yetenekleri',
-        feature1_aria:'Çoklu veri füzyonu', feature1_title:'Çoklu Veri Füzyonu', feature1_desc:'Farklı kaynakları tek bağlamda birleştirip çapraz arama ve korelasyon yapın.',
-        feature2_aria:'Doğal dil sorgulama', feature2_title:'Doğal Dil Sorgulama', feature2_desc:'Chat arayüzünde Türkçe dahil 100+ dil desteği ile anında cevap alın.',
-        feature3_aria:'Görsel ve video analiz', feature3_title:'Görsel & Video Analizi', feature3_desc:'Nesne tanıma, sahne/olay segmentasyonu.',
-        feature4_aria:'Ses ve çağrı analitiği', feature4_title:'Ses & Çağrı Analitiği', feature4_desc:'STT, konuşmacı ayrımı, duygu/niyet analizi, kalite metrikleri.',
-        feature5_aria:'Tablo ve veri ambarı', feature5_title:'Tablo & BI Köprüsü', feature5_desc:'SQL/CSV/Parquet içe aktarım, metrik kartları ve dashboard köprüsü.',
-        feature6_aria:'Güvenlik ve denetim', feature6_title:'Güvenlik', feature6_desc:'RBAC, SSO, denetim günlüğü ve hassas veri maskeleme.',
-        integrations_aria:'Entegrasyonlar',
-        int_aws:'S3 / MinIO', int_pg:'PostgreSQL / pgvector', int_docker:'Docker / K8s', int_rag:'RAG', int_llm:'LLM', int_tts:'TTS', int_torch:'PyTorch', int_kafka:'Kafka', int_sdk:'Python SDK',
-        mods_title:'Desteklenen Veri Tipleri', mods_sub:'Tek platform, farklı veri akışları',
-        mod_text:'Metin', mod_text_desc:'PDF, Word, HTML, e‑posta, Markdown',
-        mod_image:'Görsel', mod_image_desc:'OCR, EXIF çıkarımı',
-        mod_video:'Video', mod_video_desc:'Nesne tespiti, sahne/olay analizi, konuşma çıkarımı',
-        mod_audio:'Ses', mod_audio_desc:'STT, konuşmacı ayrımı (diarization), duygu/niyet',
-        mod_signal:'Sinyal', mod_signal_desc:'RF/IoT/telm. spektrum analizi, anomali tespiti',
-        mod_table:'Tablo', mod_table_desc:'CSV, Excel, SQL sonuçları, metrik panelleri',
-        demo_title:'Hızlı Demo', demo_sub:'RAG destekli SAKAI sohbet arayüzünden örnek etkileşim',
-        chat_head:'Örnek Sohbet',
-        chat_ai_1:'Merhaba! “Q2_2025_GelirTablosu.xlsx” ve “Earnings_Call_2025Q2.pdf” dosyalarıyla çalışıyorum. İlk sorunuz nedir?',
-        chat_user_1:'Q2 net satış ve brüt marj kaç?',
-        chat_ai_2:'Net satış: <strong>₺1.24B</strong> · Brüt marj: <strong>%36.8</strong>.<br><em>Kaynak: Q2_2025_GelirTablosu.xlsx → “GelirTablosu”!B12,C18</em>',
-        chat_user_2:'Net kâr marjı ve EBITDA nedir?',
-        chat_ai_3:'Net kâr marjı: <strong>%15.1</strong> · EBITDA: <strong>₺238M</strong>.<br><em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Özet”!D6,D9</em>',
-        chat_user_3:'Operasyonel giderlerin % değişimi?',
-        chat_ai_4:'Q/Q bazda <strong>%+6.3</strong> artış (özellikle S&M kalemi).<br><em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Giderler”!B7:D12</em>',
-        chat_user_4:'Kur etkisi (FX) net kâra katkı?',
-        chat_ai_5:'FX net etkisi: <strong>₺+18.6M</strong> (elde edilen kur farkı gelirleri).<br><em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Diğer Gelir/Gider”!C5</em>',
-        chat_user_5:'Q3 için brüt marj rehberi?',
-        chat_ai_6:'CFO rehberi: <strong>+80‑120 bps</strong> iyileşme beklentisi.<br><em>Kaynak: Earnings_Call_2025Q2.pdf → s.3 (Soru‑Cevap)</em>',
-        chat_user_6:'Serbest nakit akımı (FCF) ve borç/özkaynak oranı?',
-        chat_ai_7:'FCF: <strong>₺126M</strong> · Borç/Özkaynak: <strong>0.42x</strong>.<br><em>Kaynak: Q2_2025_GelirTablosu.xlsx → “Nakit Akımı”!E14; “Bilanço”!C22,C34</em>',
-        why_title:'Neden SAKAI?',
-        why_1:'<i class="fa-solid fa-check"></i> Dosya-kısıtlı cevap ve kaynak alıntısı ile <strong>halüsinasyon azaltma</strong>.',
-        why_2:'<i class="fa-solid fa-check"></i> <strong>On-prem / offline</strong> kurulum; veriniz kurum dışına çıkmaz.',
-        why_3:'<i class="fa-solid fa-check"></i> <strong>Rol bazlı erişim</strong> ve kullanıcıya özel paneller.',
-        why_4:'<i class="fa-solid fa-check"></i> <strong>Plug & Play</strong> entegrasyon: Kafka, Elastic, PostgreSQL…',
-        why_5:'<i class="fa-solid fa-check"></i> <strong>Çoklu veri türü analizi</strong>: metin, görsel, ses, video, sinyal, tablo.',
-        why_6:'<i class="fa-solid fa-check"></i> <strong>Gerçek zamanlı sorgu yanıtı</strong> ve büyük veri desteği.',
-        why_7:'<i class="fa-solid fa-check"></i> <strong>Kuruma özel LLM eğitimi</strong> ile daha doğru ve bağlama uygun yanıtlar.',
-        why_8:'<i class="fa-solid fa-check"></i> <strong>Endüstri standartlarında güvenlik</strong>: şifreleme, loglama, erişim kontrolü.',
-        why_9:'<i class="fa-solid fa-check"></i> <strong>Modüler mimari</strong> ile ihtiyaca göre özelleştirilebilir yapı.',
-        contact_title:'İletişime Geç', contact_sub:'Kurumunuz için canlı demo ve fiyatlandırma bilgisi almak için bizimle iletişime geçin',
-        email_label:'E-posta:', contact_cta:'Mail Gönder',
-        copyright:'©', rights:'Tüm hakları saklıdır.',
-        footer_privacy:'Gizlilik', footer_kvkk:'KVKK', footer_terms:'Kullanım Şartları'
+      tr:{
+        nav_aria:'Ana gezinme',
+        brand_aria:'Industrial SAKAI ana sayfa',
+        primary_nav:'Birincil',
+        burger_aria:'Menüyü aç/kapat',
+        lang_switch:'Dil seçici',
+        meta_title:'Industrial SAKAI – Üretim Hattı için Yapay Zekâ Katmanı',
+        meta_desc:'Industrial SAKAI: PLC, SCADA, sensör ve bakım kayıtlarını bir araya getirip kestirimli bakım, anomali tespiti ve kök neden analizi sağlayan yapay zekâ destekli üretim hattı zekâ katmanı.',
+        nav_problem:'Problem', nav_solution:'Çözüm', nav_capabilities:'Yetenekler', nav_scenario:'Senaryo', nav_arch:'Mimari', nav_contact:'İletişim',
+        eyebrow:'Üretim Hattı Zekâ Katmanı • On-prem',
+        hero_title:'Industrial SAKAI, <span class="accent">PLC ve sensör verisini</span> anlık içgörüye çevirerek duruşları öngörür ve kök nedenleri ortaya çıkarır.',
+        hero_desc:'PLC / SCADA, sensör, bakım kayıtları ve operatör notlarını tek bağlamda birleştiren LLM destekli platform. Üretim hattınız için kestirimli bakım, anomali tespiti ve kök neden analizi.',
+        hero_kpi1:'<i class="fa-solid fa-arrow-trend-up"></i><span>OEE artışı: </span><span class="value">+%3-5</span>',
+        hero_kpi2:'<i class="fa-solid fa-stopwatch"></i><span>Arıza tespit süresi: </span><span class="value">-%30</span>',
+        hero_kpi3:'<i class="fa-solid fa-sack-dollar"></i><span>Beklenmeyen duruş maliyeti: </span><span class="value">-%10-15</span>',
+        cta_header:'Hat keşif çağrısı planla',
+        cta_primary:'Örnek Senaryoyu Gör',
+        cta_secondary:'Yeteneklere göz at',
+        panel_title:'Hat 3 – Paketleme',
+        panel_sub:'PLC: S7-1500 • 42 tag izleniyor',
+        panel_state:'Çalışıyor · AI izliyor',
+        panel_oee_label:'OEE (son 24s)',
+        panel_oee_trend:'+2.3 pts · AI önerisi uygulandı',
+        panel_mtbf_label:'MTBF',
+        panel_mtbf_trend:'+12.5% · planlı bakım',
+        panel_alarm_head:'Canlı uyarılar',
+        panel_alarm1_title:'Yüksek titreşim',
+        panel_alarm1_desc:'Motor M3 · RMS titreşim 18 dk içinde eşik üstünde',
+        panel_alarm1_tag:'Önleyici uyarı',
+        panel_alarm2_title:'Plan dışı duruş riski',
+        panel_alarm2_desc:'Geçmiş 12 duruşun %73’ü benzer pattern',
+        panel_alarm2_tag:'Risk',
+        panel_alarm3_title:'Muhtemel kök neden',
+        panel_alarm3_desc:'Ana neden: Konveyör bant gerginliği · %62 güven',
+        panel_alarm3_tag:'RCA',
+        panel_footer_left:'LLM Co-pilot: Son duruş için aksiyon listesi hazır',
+        panel_footer_right:'Son 30 günde 9 arıza erken yakalandı',
+        problem_title:'Fabrika verisi dağınık; duruşların kök nedeni görünmez.',
+        problem_sub:'PLC/SCADA, historian, MES, bakım kayıtları ve operatör notları ayrı sistemlerde. Ekipler reaktif koşuyor; duruşlar tekrar ediyor, OEE hedefleri kaçıyor.',
+        problem1_title:'Tag’ler, log’lar, formlar birbirini görmüyor',
+        problem1_desc:'Farklı PLC markaları, historian verileri, MES ve Excel raporları aynı ekranı paylaşmıyor. Bir hat arızasında operatör, bakım ve proses mühendisi aynı resmi görmek için zaman kaybediyor.',
+        problem2_title:'Reaktif bakım ve tekrar eden duruşlar',
+        problem2_desc:'Alarm geldiğinde hat çoğunlukla zaten durmuş oluyor. Duruşlar tek tek kapatılıyor; root cause analizi yapılmadığı için aynı problem farklı günlerde tekrar ediyor.',
+        problem3_title:'Uzman bağımlılığı ve bilgi kaybı',
+        problem3_desc:'“O motor hep böyledir” diyen birkaç kilit kişi var. Vardiya değişimlerinde, yeni operatör geldiğinde veya saha dışı destek gerektiğinde bu sessiz bilgi kayboluyor.',
+        solution_title:'Industrial SAKAI: Üretim hattı için yapay zekâ katmanı',
+        solution_desc:'Industrial SAKAI; PLC/SCADA, sensör, historian, bakım kayıtları ve operatör açıklamalarını tek bağlamda birleştirir. LLM tabanlı co-pilot, duruşu anlamanıza, kök nedeni görmenize ve tekrarı engellemenize yardım eder.',
+        solution_b1:'<i class="fa-solid fa-check"></i> Hat bazlı dijital twin ve canlı performans panelleri',
+        solution_b2:'<i class="fa-solid fa-check"></i> Anomali tespiti, kestirimli bakım ve RCA (root cause analysis)',
+        solution_b3:'<i class="fa-solid fa-check"></i> On-prem kurulum, PLC/historian entegrasyonları ve yetki tabanlı erişim',
+        solution_step1:'<span class="step-index">1</span><span>Topla · PLC tag, alarm, sensör, bakım kaydı, operatör notu</span>',
+        solution_step2:'<span class="step-index">2</span><span>Anla · Zaman senkronizasyonu, pattern ve korelasyon analizi</span>',
+        solution_step3:'<span class="step-index">3</span><span>Öner · Duruş öncesi uyarı, aksiyon listesi ve kök neden haritası</span>',
+        cap_title:'Üretim için tasarlanmış başlıca yetenekler',
+        cap_sub:'Hat bazlı performans, kestirimli bakım ve gerçek zamanlı uyarılar; tamamı PLC/SCADA ve bakım verilerinizle beslenen bir yapay zekâ katmanı.',
+        cap1_title:'Gerçek zamanlı hat dijital twini',
+        cap1_desc:'OEE, hız, atık, mikro duruşlar ve enerji tüketimini tek ekranda görün. PLC tag’leri ve historian verileri otomatik eşleştirilir.',
+        cap1_small:'Seri üretim hatları, paketleme, dolum, montaj hücreleri',
+        cap2_title:'Anomali tespiti & kestirimli bakım',
+        cap2_desc:'Titreşim, akım, sıcaklık ve hız sinyallerinde öğrenilmiş normalden sapmaları yakalar. Duruş gerçekleşmeden önce bakım ekibini uyarır.',
+        cap2_small:'MTBF, MTTR ve planlı bakım uyumu iyileşir',
+        cap3_title:'Kök neden analizi (RCA) haritaları',
+        cap3_desc:'Geçmiş duruşlar, alarmlar ve bakım notlarını veri odaklı bir RCA grafiğine çevirir; “en olası neden” ve “destekleyici sinyaller”i gösterir.',
+        cap3_small:'LLM destekli açıklamalar ve aksiyon önerileri',
+        cap4_title:'Operatör ve bakım co-pilot',
+        cap4_desc:'Operatör; doğal dilde “Bu alarm neden tekrar ediyor?” diye sorduğunda, sistem PLC trendleri, geçmiş arızalar ve bakım log’larından yanıt üretir.',
+        cap4_small:'Vardiya değişimlerinde bilgi kaybını azaltır',
+        cap5_title:'On-prem, güvenlik ve yetki',
+        cap5_desc:'Tamamen kurum içinde (on-prem veya edge) çalışır. RBAC, SSO, denetim logları ve veri maskeleme ile üretim veriniz sahadan dışarı çıkmaz.',
+        cap5_small:'IT ve OT güvenlik politikalarına uyumlu',
+        cap6_title:'PLC & historian entegrasyonları',
+        cap6_desc:'Siemens, Allen-Bradley vb. PLC’ler, OPC UA/DA, Modbus, MQTT, historian ve MES sistemleri ile entegre olur; veri modeli tekilleştirilir.',
+        cap6_small:'Mevcut altyapıya ek katman olarak konumlanır',
+        scenario_title:'Örnek senaryo: Paketleme hattında tekrar eden duruş',
+        scenario_sub:'Hat 3 paketleme hattında, son üç hafta içinde 11 kez tekrar eden “etiketleme ünitesi arızası” var. Industrial SAKAI bu durumu nasıl ele alır?',
+        scenario_flow_title:'Adım adım akış',
+        scenario_step1_title:'Veri akışı',
+        scenario_step1_desc:'PLC’den hız, tork, sıcaklık, alarm ve I/O durum sinyalleri; historian trendleri, bakım talimatları ve operatör açıklamaları Industrial SAKAI’ye akıyor.',
+        scenario_step2_title:'Anomali yakalama',
+        scenario_step2_desc:'Model, hat durmadan önceki 20 dakikada motor akımındaki pattern ve etiket sensöründeki mikro kesintileri “tekrar eden anomali” olarak işaretliyor.',
+        scenario_step3_title:'RCA ve öneri',
+        scenario_step3_desc:'LLM tabanlı co-pilot; geçmiş 11 duruşu, bakım notlarını ve trendleri tarayıp “konveyör bant gerginliği ve rulman ömrü”nü en olası kök neden olarak sunuyor; kontrol listesi öneriyor.',
+        scenario_step4_title:'Proaktif aksiyon',
+        scenario_step4_desc:'Bakım ekibi, duruş planlanmadan önce ilgili vardiyada kontrolü yapıyor. Sistem; aksiyon alındıktan sonraki ilk 30 günde benzer pattern’i takip ederek iyileşmeyi doğruluyor.',
+        scenario_note:'Operatör, “Bu alarm tekrar ederse önce neyi kontrol etmeliyim?” diye sorduğunda, Industrial SAKAI aynı RCA bilgisini doğal dilde, adım adım anlatır.',
+        scenario_kpi_title:'Ölçülebilir etki',
+        scenario_kpi1_label:'Paketleme hattı duruş süresi',
+        scenario_kpi1_val:'-%27',
+        scenario_kpi2_label:'Tekrar eden arıza sayısı',
+        scenario_kpi2_val:'11 → 3',
+        scenario_kpi3_label:'Arıza teşhis süresi',
+        scenario_kpi3_val:'-%35',
+        scenario_kpi4_label:'Operatör soru sayısı',
+        scenario_kpi4_val:'LLM co-pilot ile daha hızlı yanıt',
+        arch_title:'Endüstriyel ortama uygun mimari',
+        arch_sub:'Industrial SAKAI, mevcut PLC/SCADA ve historian mimarinize eklenen ince bir zekâ katmanı olarak konumlanır; mevcut OT altyapınızı değiştirmez.',
+        arch1_title:'Edge Collector',
+        arch1_1:'OPC UA/DA, Modbus, MQTT, REST',
+        arch1_2:'PLC ve sensörlerden veri akışı',
+        arch1_3:'Yerel ön işleme ve buffering',
+        arch2_title:'Zaman serisi & feature store',
+        arch2_1:'Zaman senkronizasyonu ve etiketleme',
+        arch2_2:'Duruş, alarm ve bakım kayıtlarının birleşimi',
+        arch2_3:'Hat/ekipman bazlı veri modeli',
+        arch3_title:'ML & LLM Motoru',
+        arch3_1:'Anomali tespiti ve öngörü modelleri',
+        arch3_2:'RCA graf yapıları ve pattern madenciliği',
+        arch3_3:'LLM tabanlı doğal dil co-pilot',
+        arch4_title:'Kullanıcı arayüzü & entegrasyon',
+        arch4_1:'Hat panelleri, RCA ekranları ve alarm görünümleri',
+        arch4_2:'Bakım & MES sistemleri ile entegrasyon',
+        arch4_3:'REST / gRPC API ve webhook’lar',
+        contact_title:'İlk pilot hattınızı birlikte seçelim',
+        contact_sub:'30-60 dakikalık bir keşif görüşmesinde üretim hattınızı dinliyor, veri kaynaklarınızı haritalıyor ve Industrial SAKAI için en uygun pilot senaryoyu birlikte tasarlıyoruz.',
+        email_label:'E-posta:',
+        contact_cta:'Pilot hat için bize yaz',
+        contact_note:'Türkiye’deki erken dönem pilot projeler için sınırlı kontenjanda özel koşullar sunuyoruz.',
+        rights:'Tüm hakları saklıdır.',
+        footer_privacy:'Gizlilik',
+        footer_kvkk:'KVKK',
+        footer_terms:'Kullanım Şartları'
       },
-      en: {
-        meta_title: 'SAKAI – Multimodal Data Analytics Platform',
-        meta_desc: 'SAKAI: an AI‑powered analytics platform that unifies text, images, video, audio, signal and tabular data in one place.',
-        nav_aria: 'Main navigation',
-        brand_aria: 'SAKAI home',
-        primary_nav: 'Primary',
-        burger_aria: 'Open/close menu',
-        lang_switch: 'Language picker',
-        nav_features: 'Features', nav_modalities: 'Data Types', nav_demo: 'Demo', nav_contact: 'Contact',
-        eyebrow: 'Multimodal Analytics • Offline support',
-        hero_title: 'Understand your enterprise data on <span style="background:linear-gradient(90deg,var(--primary),var(--primary-2));-webkit-background-clip:text;background-clip:text;color:transparent">a single platform</span> and turn it into action fast.',
-        hero_desc: 'SAKAI unifies text, image, video, audio, signal and tables. Ask in natural language with an LLM + RAG interface; deploy securely on‑prem and offline.',
-        badge_privacy: '<i class="fa-solid fa-lock"></i> Keep data in‑house',
-        badge_plug: '<i class="fa-solid fa-diagram-project"></i> Plug & Play integration',
-        badge_rt: '<i class="fa-solid fa-gauge-high"></i> Real‑time analytics',
-        cta_demo: 'Quick Demo', cta_features: 'Explore Features', cta_quote: 'Get a Quote',
-        card_fusion_title: 'Multimodal Fusion', card_fusion_desc: 'Unified inspection across text+audio+image+video+signal with context preservation.',
-        card_rag_title: 'LLM + RAG', card_rag_desc: 'Source‑grounded answers with citations and file‑scoped responses.',
-        card_sec_title: 'Security', card_sec_desc: 'RBAC, audit trail, offline/air‑gapped deployment.',
-        features_title: 'Powerful Features', features_sub: 'SAKAI capabilities that turn data into operational insight',
-        feature1_aria:'Multimodal fusion', feature1_title:'Multimodal Fusion', feature1_desc:'Merge sources into one context to cross‑search and correlate.',
-        feature2_aria:'Natural language querying', feature2_title:'Natural Language Querying', feature2_desc:'Instant answers in 100+ languages including Turkish.',
-        feature3_aria:'Image and video analytics', feature3_title:'Image & Video Analytics', feature3_desc:'Object detection, scene/event segmentation.',
-        feature4_aria:'Audio and call analytics', feature4_title:'Audio & Call Analytics', feature4_desc:'STT, speaker diarization, sentiment/intent, QA metrics.',
-        feature5_aria:'Tables and data warehouse', feature5_title:'Tables & BI Bridge', feature5_desc:'Import SQL/CSV/Parquet, metric cards and dashboard bridge.',
-        feature6_aria:'Security and audit', feature6_title:'Security', feature6_desc:'RBAC, SSO, audit logging and sensitive data masking.',
-        integrations_aria:'Integrations',
-        int_aws:'S3 / MinIO', int_pg:'PostgreSQL / pgvector', int_docker:'Docker / K8s', int_rag:'RAG', int_llm:'LLM', int_tts:'TTS', int_torch:'PyTorch', int_kafka:'Kafka', int_sdk:'Python SDK',
-        mods_title:'Supported Data Types', mods_sub:'One platform, many streams',
-        mod_text:'Text', mod_text_desc:'PDF, Word, HTML, email, Markdown',
-        mod_image:'Image', mod_image_desc:'OCR, EXIF extraction',
-        mod_video:'Video', mod_video_desc:'Object detection, scene/event analysis, speech extraction',
-        mod_audio:'Audio', mod_audio_desc:'STT, speaker diarization, sentiment/intent',
-        mod_signal:'Signal', mod_signal_desc:'RF/IoT/telemetry spectrum analysis, anomaly detection',
-        mod_table:'Table', mod_table_desc:'CSV, Excel, SQL results, metric panels',
-        demo_title:'Quick Demo', demo_sub:'Sample interaction from SAKAI\'s RAG‑powered chat UI',
-        chat_head:'Sample Chat',
-        chat_ai_1:'Hello! I\'m working with “Q2_2025_IncomeStatement.xlsx” and “Earnings_Call_2025Q2.pdf”. What\'s your first question?',
-        chat_user_1:'What are Q2 net sales and gross margin?',
-        chat_ai_2:'Net sales: <strong>₺1.24B</strong> · Gross margin: <strong>36.8%</strong>.<br><em>Source: Q2_2025_IncomeStatement.xlsx → “IncomeStatement”!B12,C18</em>',
-        chat_user_2:'Net profit margin and EBITDA?',
-        chat_ai_3:'Net profit margin: <strong>15.1%</strong> · EBITDA: <strong>₺238M</strong>.<br><em>Source: Q2_2025_IncomeStatement.xlsx → “Summary”!D6,D9</em>',
-        chat_user_3:'% change in operating expenses?',
-        chat_ai_4:'<strong>+6.3%</strong> Q/Q (mainly S&M).<br><em>Source: Q2_2025_IncomeStatement.xlsx → “Expenses”!B7:D12</em>',
-        chat_user_4:'FX impact on net income?',
-        chat_ai_5:'FX net impact: <strong>₺+18.6M</strong> (currency gain).<br><em>Source: Q2_2025_IncomeStatement.xlsx → “Other Inc/Exp”!C5</em>',
-        chat_user_5:'Gross margin guide for Q3?',
-        chat_ai_6:'CFO guidance: <strong>+80‑120 bps</strong> improvement expected.<br><em>Source: Earnings_Call_2025Q2.pdf → p.3 (Q&A)</em>',
-        chat_user_6:'Free cash flow (FCF) and debt/equity?',
-        chat_ai_7:'FCF: <strong>₺126M</strong> · Debt/Equity: <strong>0.42x</strong>.<br><em>Source: Q2_2025_IncomeStatement.xlsx → “Cash Flow”!E14; “Balance Sheet”!C22,C34</em>',
-        why_title:'Why SAKAI?',
-        why_1:'<i class="fa-solid fa-check"></i> <strong>Fewer hallucinations</strong> via file‑scoped answers and citations.',
-        why_2:'<i class="fa-solid fa-check"></i> <strong>On‑prem / offline</strong> deployment; your data stays inside.',
-        why_3:'<i class="fa-solid fa-check"></i> <strong>Role‑based access</strong> and user‑specific dashboards.',
-        why_4:'<i class="fa-solid fa-check"></i> <strong>Plug & Play</strong> integrations: Kafka, Elastic, PostgreSQL…',
-        why_5:'<i class="fa-solid fa-check"></i> <strong>Multimodal analytics</strong>: text, image, audio, video, signal, tables.',
-        why_6:'<i class="fa-solid fa-check"></i> <strong>Real‑time responses</strong> and big‑data support.',
-        why_7:'<i class="fa-solid fa-check"></i> <strong>Organization‑tuned LLMs</strong> for accuracy and context fit.',
-        why_8:'<i class="fa-solid fa-check"></i> <strong>Enterprise‑grade security</strong>: encryption, logging, access control.',
-        why_9:'<i class="fa-solid fa-check"></i> <strong>Modular architecture</strong> to tailor to your needs.',
-        contact_title:'Get in Touch', contact_sub:'Contact us for a live demo and pricing tailored to your organization',
-        email_label:'Email:', contact_cta:'Send Email',
-        copyright:'©', rights:'All rights reserved.',
-        footer_privacy:'Privacy', footer_kvkk:'PDPL', footer_terms:'Terms of Use'
+      en:{
+        nav_aria:'Main navigation',
+        brand_aria:'Industrial SAKAI home',
+        primary_nav:'Primary',
+        burger_aria:'Open/close menu',
+        lang_switch:'Language picker',
+        meta_title:'Industrial SAKAI – AI Layer for Production Lines',
+        meta_desc:'Industrial SAKAI is an AI-powered intelligence layer for production lines that fuses PLC, SCADA, sensor and maintenance data to deliver predictive maintenance, anomaly detection and root-cause analysis.',
+        nav_problem:'Problem', nav_solution:'Solution', nav_capabilities:'Capabilities', nav_scenario:'Scenario', nav_arch:'Architecture', nav_contact:'Contact',
+        eyebrow:'Production Line Intelligence Layer • On-prem',
+        hero_title:'Industrial SAKAI turns <span class="accent">PLC and sensor data</span> into live insights that predict downtime and surface root causes.',
+        hero_desc:'An LLM-powered platform that unifies PLC/SCADA, sensor, maintenance logs and operator notes into a single context. Predictive maintenance, anomaly detection and root-cause analysis for your production lines.',
+        hero_kpi1:'<i class="fa-solid fa-arrow-trend-up"></i><span>OEE uplift: </span><span class="value">+3-5 pts</span>',
+        hero_kpi2:'<i class="fa-solid fa-stopwatch"></i><span>Fault diagnosis time: </span><span class="value">-30%</span>',
+        hero_kpi3:'<i class="fa-solid fa-sack-dollar"></i><span>Unplanned downtime cost: </span><span class="value">-10-15%</span>',
+        cta_header:'Book a line discovery call',
+        cta_primary:'See the sample scenario',
+        cta_secondary:'Explore capabilities',
+        panel_title:'Line 3 – Packaging',
+        panel_sub:'PLC: S7-1500 • 42 tags monitored',
+        panel_state:'Running · AI watching',
+        panel_oee_label:'OEE (last 24h)',
+        panel_oee_trend:'+2.3 pts · AI recommendation applied',
+        panel_mtbf_label:'MTBF',
+        panel_mtbf_trend:'+12.5% · planned maintenance',
+        panel_alarm_head:'Live alerts',
+        panel_alarm1_title:'High vibration',
+        panel_alarm1_desc:'Motor M3 · RMS vibration above threshold for 18 min',
+        panel_alarm1_tag:'Preventive alert',
+        panel_alarm2_title:'Unplanned stop risk',
+        panel_alarm2_desc:'73% of last 12 stops share this pattern',
+        panel_alarm2_tag:'Risk',
+        panel_alarm3_title:'Likely root cause',
+        panel_alarm3_desc:'Primary cause: conveyor belt tension · 62% confidence',
+        panel_alarm3_tag:'RCA',
+        panel_footer_left:'LLM co-pilot: Action list ready for last stoppage',
+        panel_footer_right:'9 failures caught early in the last 30 days',
+        problem_title:'Factory data is fragmented; root causes stay hidden.',
+        problem_sub:'PLC/SCADA, historian, MES, maintenance logs and operator notes live in separate systems. Teams stay reactive, stoppages repeat and OEE targets slip.',
+        problem1_title:'Tags, logs and forms don’t see each other',
+        problem1_desc:'Different PLC brands, historian feeds, MES and Excel reports never share a single screen. During a line failure, operators, maintenance and process engineers waste time to align on the same picture.',
+        problem2_title:'Reactive maintenance and recurring downtime',
+        problem2_desc:'By the time the alarm hits, the line is usually already down. Events are closed one by one; without structured RCA the same issue returns on a different day.',
+        problem3_title:'Expert dependency and tribal knowledge loss',
+        problem3_desc:'A few key experts “know how this motor behaves”. When shifts change, new operators join or remote support is needed, that knowledge does not travel with them.',
+        solution_title:'Industrial SAKAI: An AI layer for your production lines',
+        solution_desc:'Industrial SAKAI fuses PLC/SCADA, sensor, historian, maintenance records and operator comments into a single context. The LLM-based co-pilot helps you understand stoppages, see root causes and prevent recurrences.',
+        solution_b1:'<i class="fa-solid fa-check"></i> Line-level digital twin and live performance dashboards',
+        solution_b2:'<i class="fa-solid fa-check"></i> Anomaly detection, predictive maintenance and RCA',
+        solution_b3:'<i class="fa-solid fa-check"></i> On-prem deployment, PLC/historian integrations and role-based access',
+        solution_step1:'<span class="step-index">1</span><span>Ingest · PLC tags, alarms, sensors, work orders, operator notes</span>',
+        solution_step2:'<span class="step-index">2</span><span>Understand · Time alignment, pattern and correlation analysis</span>',
+        solution_step3:'<span class="step-index">3</span><span>Act · Early warnings, action lists and root-cause maps</span>',
+        cap_title:'Key capabilities built for manufacturing',
+        cap_sub:'Line-level performance, predictive maintenance and real-time alerts – all powered by your PLC/SCADA and maintenance data.',
+        cap1_title:'Real-time line digital twin',
+        cap1_desc:'See OEE, speed, scrap, micro-stops and energy on a single view. PLC tags and historian series are automatically mapped to your lines.',
+        cap1_small:'Ideal for high-volume lines, packaging, filling and assembly cells',
+        cap2_title:'Anomaly detection & predictive maintenance',
+        cap2_desc:'Learns normal behaviour from vibration, current, temperature and speed signals. Warns maintenance before downtime occurs.',
+        cap2_small:'Improves MTBF, MTTR and planned maintenance adherence',
+        cap3_title:'Root-cause analysis (RCA) graphs',
+        cap3_desc:'Turns historical stoppages, alarms and maintenance notes into a data-driven RCA graph; highlights “most likely cause” and evidence signals.',
+        cap3_small:'LLM-generated explanations and action suggestions',
+        cap4_title:'Operator & maintenance co-pilot',
+        cap4_desc:'When an operator asks “Why is this alarm repeating?”, the system answers using PLC trends, past failures and maintenance logs.',
+        cap4_small:'Reduces knowledge loss across shifts and teams',
+        cap5_title:'On-prem, security and permissions',
+        cap5_desc:'Runs entirely on-prem or at the edge. RBAC, SSO, audit logging and masking keep production data inside your network.',
+        cap5_small:'Aligned with IT/OT security requirements',
+        cap6_title:'PLC & historian integrations',
+        cap6_desc:'Connects to Siemens, Allen-Bradley and others, OPC UA/DA, Modbus, MQTT, historians and MES; unifies your data model.',
+        cap6_small:'Sits as a thin intelligence layer on top of your existing stack',
+        scenario_title:'Example scenario: Recurring stoppage on a packaging line',
+        scenario_sub:'Line 3 packaging has seen 11 repeated “labeller failure” stoppages over the last three weeks. How does Industrial SAKAI handle this?',
+        scenario_flow_title:'Step-by-step flow',
+        scenario_step1_title:'Data flow',
+        scenario_step1_desc:'PLC feeds speed, torque, temperature, alarms and I/O states; historian trends, maintenance work orders and operator notes stream into Industrial SAKAI.',
+        scenario_step2_title:'Anomaly capture',
+        scenario_step2_desc:'The model flags a recurring pattern: in the 20 minutes before each stop, motor current and label sensor micro-interruptions deviate from learned normal.',
+        scenario_step3_title:'RCA & recommendation',
+        scenario_step3_desc:'The LLM co-pilot scans 11 past stoppages, maintenance notes and trends, and surfaces “conveyor belt tension and bearing wear” as most likely root cause; proposes a checklist.',
+        scenario_step4_title:'Proactive action',
+        scenario_step4_desc:'Maintenance checks the unit before the next planned stop. The system tracks the next 30 days to confirm that the pattern – and stoppages – have dropped.',
+        scenario_note:'When the operator asks, “What should I check first if this alarm comes back?”, Industrial SAKAI explains the same RCA in natural language, step by step.',
+        scenario_kpi_title:'Measured impact',
+        scenario_kpi1_label:'Packaging line downtime',
+        scenario_kpi1_val:'-27%',
+        scenario_kpi2_label:'Recurring failure count',
+        scenario_kpi2_val:'11 → 3',
+        scenario_kpi3_label:'Fault diagnosis time',
+        scenario_kpi3_val:'-35%',
+        scenario_kpi4_label:'Operator questions',
+        scenario_kpi4_val:'Faster answers via LLM co-pilot',
+        arch_title:'Architecture built for industrial environments',
+        arch_sub:'Industrial SAKAI is a thin intelligence layer on top of your existing PLC/SCADA and historian stack – no need to rip and replace your OT.',
+        arch1_title:'Edge Collector',
+        arch1_1:'OPC UA/DA, Modbus, MQTT, REST',
+        arch1_2:'Continuous data from PLCs and sensors',
+        arch1_3:'Local pre-processing and buffering',
+        arch2_title:'Time-series & feature store',
+        arch2_1:'Time alignment and tagging',
+        arch2_2:'Merged view of downtime, alarms and maintenance',
+        arch2_3:'Line/equipment-centric data model',
+        arch3_title:'ML & LLM Engine',
+        arch3_1:'Anomaly detection and forecasting models',
+        arch3_2:'RCA graph structures and pattern mining',
+        arch3_3:'LLM-based natural-language co-pilot',
+        arch4_title:'UI & integrations',
+        arch4_1:'Line dashboards, RCA views, alert consoles',
+        arch4_2:'Integrations with maintenance and MES systems',
+        arch4_3:'REST / gRPC API and webhooks',
+        contact_title:'Let’s pick your first pilot line',
+        contact_sub:'In a 30-60 minute discovery call, we listen to your line, map your data sources and design the best Industrial SAKAI pilot scenario together.',
+        email_label:'Email:',
+        contact_cta:'Reach out for a pilot line',
+        contact_note:'We offer special terms for a limited number of early pilot factories in Türkiye.',
+        rights:'All rights reserved.',
+        footer_privacy:'Privacy',
+        footer_kvkk:'PDPL',
+        footer_terms:'Terms of Use'
       }
     };
 
     function applyLang(lang){
-      // Update text-bearing nodes
       document.querySelectorAll('[data-i18n]').forEach(el=>{
         const key = el.getAttribute('data-i18n');
-        if(i18n[lang][key] !== undefined){ el.innerHTML = i18n[lang][key]; }
+        if(i18n[lang][key] !== undefined){
+          el.innerHTML = i18n[lang][key];
+        }
       });
-      // Update ARIA labels
       document.querySelectorAll('[data-i18n-aria]').forEach(el=>{
         const key = el.getAttribute('data-i18n-aria');
-        if(i18n[lang][key] !== undefined){ el.setAttribute('aria-label', i18n[lang][key]); }
+        if(i18n[lang][key] !== undefined){
+          el.setAttribute('aria-label', i18n[lang][key]);
+        }
       });
-      // Update meta title/description
       document.title = i18n[lang].meta_title;
       const metaDesc = document.querySelector('meta[name="description"]');
       if(metaDesc) metaDesc.setAttribute('content', i18n[lang].meta_desc);
-      // Update html lang
       document.documentElement.lang = (lang === 'tr' ? 'tr' : 'en');
-      // Toggle button states
-      document.getElementById('btn-tr').classList.toggle('active', lang==='tr');
-      document.getElementById('btn-tr').setAttribute('aria-pressed', lang==='tr');
-      document.getElementById('btn-en').classList.toggle('active', lang==='en');
-      document.getElementById('btn-en').setAttribute('aria-pressed', lang==='en');
-      // Persist
-      localStorage.setItem('sakai_lang', lang);
+      document.getElementById('btn-tr').classList.toggle('active', lang === 'tr');
+      document.getElementById('btn-tr').setAttribute('aria-pressed', lang === 'tr');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+      document.getElementById('btn-en').setAttribute('aria-pressed', lang === 'en');
+      localStorage.setItem('ind_sakai_lang', lang);
     }
 
-    // Init
-    const initLang = localStorage.getItem('sakai_lang') || (navigator.language?.startsWith('tr') ? 'tr' : 'en');
+    const initLang = localStorage.getItem('ind_sakai_lang') || (navigator.language?.startsWith('tr') ? 'tr' : 'en');
     applyLang(initLang);
 
-    // Handlers
     document.getElementById('btn-tr').addEventListener('click', ()=>applyLang('tr'));
     document.getElementById('btn-en').addEventListener('click', ()=>applyLang('en'));
   </script>
-
 </body>
 </html>
